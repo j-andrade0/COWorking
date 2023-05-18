@@ -1,1 +1,0 @@
-console.log('só pra subir a pasta pro git');
