@@ -2,23 +2,16 @@ import users from '../models/User.js';
 
 class UserController {
 	static getAllUsers = (req, res) => {
-		/* #swagger.tags = ['User']*/
 		users.find((err, users) => {
 			if (err) {
 				res.status(500).send({ message: err.message });
 			} else {
-				/* #swagger.responses[200] = { 
-					schema: { $ref: "#/definitions/User" },
-					description: 'Usuário encontrado.' 
-        		} */
 				res.status(200).json(users);
 			}
 		});
 	};
 
 	static getUserById = (req, res) => {
-		/* #swagger.tags = ['User']*/
-
 		const id = req.params.id;
 
 		users.findById(id, (err, users) => {
@@ -27,17 +20,12 @@ class UserController {
 					message: `${err.message} - Id not found.`,
 				});
 			} else {
-				/* #swagger.responses[200] = { 
-               		schema: { $ref: "#/definitions/User" },
-        		} */
 				res.status(200).send(users);
 			}
 		});
 	};
 
 	static createUser = (req, res) => {
-		/* #swagger.tags = ['User']*/
-
 		let user = new users(req.body);
 
 		user.save((err) => {
@@ -52,7 +40,6 @@ class UserController {
 	};
 
 	static updateUser = (req, res) => {
-		/* #swagger.tags = ['User']*/
 		const id = req.params.id;
 
 		users.findByIdAndUpdate(id, { $set: req.body }, (err) => {
@@ -66,7 +53,6 @@ class UserController {
 
 	// HOW SHOULD WE DELETE A USER?
 	static deleteUser = (req, res) => {
-		/* #swagger.tags = ['User']*/
 		const id = req.params.id;
 
 		users.findByIdAndDelete(id, (err) => {

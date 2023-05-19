@@ -32,7 +32,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Usuário encontrado.",
+            "description": "OK",
             "schema": {
               "$ref": "#/definitions/User"
             }
@@ -47,7 +47,17 @@
           "User"
         ],
         "description": "",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "newUser",
+            "in": "body",
+            "description": "Informações do usuário.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateUser"
+            }
+          }
+        ],
         "responses": {
           "201": {
             "description": "Created"
@@ -95,6 +105,15 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "newUser",
+            "in": "body",
+            "description": "Update Users information.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUser"
+            }
           }
         ],
         "responses": {
@@ -211,6 +230,59 @@
         "birthDate",
         "phoneNumber",
         "password"
+      ]
+    },
+    "UpdateUser": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Manoel Gomes"
+        },
+        "cpf": {
+          "type": "string",
+          "example": "000.000.000-00"
+        },
+        "email": {
+          "type": "string",
+          "example": "manoelgomes@gmail.com"
+        },
+        "birthDate": {
+          "type": "string",
+          "example": "02/12/1969"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "example": "(99)99999-9999"
+        },
+        "password": {
+          "type": "string",
+          "example": "canetaAzuuul"
+        },
+        "profilePhoto": {
+          "type": "string",
+          "example": "/users/profilePhotos/ícone-brasileiro-id:3128758325.jpg"
+        }
+      },
+      "required": [
+        "name",
+        "cpf",
+        "email",
+        "birthDate",
+        "phoneNumber",
+        "password"
+      ]
+    },
+    "UpdateUsersProfilePhoto": {
+      "type": "object",
+      "properties": {
+        "profilePhoto": {
+          "type": "string",
+          "example": "/users/profilePhotos/ícone-brasileiro-id:3128758325.jpg"
+        }
+      },
+      "required": [
+        "profilePhoto"
       ]
     }
   }
