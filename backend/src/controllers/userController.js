@@ -26,7 +26,7 @@ class UserController {
 	};
 
 	static createUser = (req, res) => {
-		let user = new users(req.body);
+		let user = new users(req.body.id, req.body.name, req.body.cpf, req.body.email, req.body.birthDate, req.body.phoneNumber, req.body.password, req.body.profilePhoto, req.body.balanceAccount);
 
 		user.save((err) => {
 			if (err) {
