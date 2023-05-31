@@ -7,23 +7,25 @@ const User = db.define(
 		id: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
-			primaryKey: true,
+			primaryKey: true
 		},
 		firstName: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: false
 		},
 		lastName: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: false
 		},
 		cpf: {
 			type: DataTypes.STRING,
 			allowNull: false,
+			unique: true
 		},
 		email: {
 			type: DataTypes.STRING(320),
 			allowNull: false,
+			unique: true
 		},
 		birthDate: {
 			type: DataTypes.DATEONLY,
@@ -31,25 +33,26 @@ const User = db.define(
 		},
 		phoneNumber: {
 			type: DataTypes.STRING(15),
-			allowNull: false,
+			allowNull: false
 		},
 		password: {
 			type: DataTypes.STRING(99),
-			allowNull: false,
+			allowNull: false
 		},
 		profilePhoto: {
 			type: DataTypes.STRING,
 			allowNull: true,
+			unique: true
 		},
 		balanceAccount: {
 			type: DataTypes.DECIMAL(6, 2),
 			allowNull: false,
-			defaultValue: 0.00,
+			defaultValue: 0.0
 		}
 		// add a city relationship
 	},
 	{
-		tableName: 'Users',
+		tableName: 'Users'
 	}
 );
 
