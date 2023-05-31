@@ -21,7 +21,6 @@ router.get('/users/:id', UserController.getUserById, () => {
 
 router.post('/users', UserController.createUser, () => {
 	/* #swagger.tags = ['User']*/
-	/* #swagger.tags = ['User']*/
 	/* #swagger.parameters['newUser'] = {
 		in: 'body',
 		description: 'Informações do usuário.',

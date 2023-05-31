@@ -22,7 +22,8 @@
   },
   "dependencies": {
     "express": "^4.17.3",
-    "mongoose": "^6.2.6",
+    "mysql2": "^3.3.2",
+    "sequelize": "^6.31.1",
     "swagger-autogen": "^2.23.1",
     "swagger-ui-express": "^4.1.4"
   },

@@ -1,10 +1,17 @@
-import mongoose from 'mongoose';
+import { Sequelize } from 'sequelize';
+import env from './env.json' assert { type: 'json' };
 
-// REVIEW CONNECTION
-mongoose.connect(
-	'mongodb+srv://andrade:pM2HvU37TESJ7JAp6Kfu6ac6mnXsjEVdG63JDAp@cluster0.zrdi0v6.mongodb.net/Alura-node'
-);
+const db = new Sequelize(env.db_name, env.db_user, env.db_password, {
+	host: 'localhost',
+	dialect: 'mysql',
+});
 
-let db = mongoose.connection;
+try {
+	await db.authenticate();
+	console.log('Connection has been established successfully.');
+} catch (error) {
+	console.error('Unable to connect to the database:', error);
+}
 
 export default db;
+// should close the connection?
