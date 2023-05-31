@@ -1,67 +1,60 @@
-import users from '../models/User.js';
+import User from '../models/User.js';
 
 class UserController {
-	static getAllUsers = (req, res) => {
-		users.find((err, users) => {
-			if (err) {
-				res.status(500).send({ message: err.message });
-			} else {
-				res.status(200).json(users);
-			}
-		});
+	static getAllUsers = async (req, res) => {
+		try {
+			const users = await User.findAll();
+			res.status(200).json(users);
+		} catch (error) {
+			res.status(500).send({ message: `${error.message}` });
+		}
 	};
 
-	static getUserById = (req, res) => {
-		const id = req.params.id;
-
-		users.findById(id, (err, users) => {
-			if (err) {
+	static getUserById = async (req, res) => {
+		try {
+			const entity = await User.findByPk(req.params.id);
+			if (entity) {
+				res.status(200).json(entity);
+			} else {
 				res.status(400).send({
-					message: `${err.message} - Id not found.`,
+					message: `Id ${req.params.id} not found!`,
 				});
-			} else {
-				res.status(200).send(users);
 			}
-		});
+		} catch (error) {
+			res.status(500).send({ message: `${error.message}` });
+		}
 	};
 
-	static createUser = (req, res) => {
-		let user = new users(req.body);
-
-		user.save((err) => {
-			if (err) {
-				res.status(500).send({
-					message: `${err.message} - Couldn't register User`,
-				});
-			} else {
-				res.status(201).send(user.toJSON());
-			}
-		});
+	static createUser = async (req, res) => {
+		try {
+			await User.create(req.body);
+			res.status(201).send({ message: "Entity created!"});
+		} catch (error) {
+			res.status(500).send({ message: `${error.message}` });
+		}
 	};
 
-	static updateUser = (req, res) => {
-		const id = req.params.id;
+	static updateUser = async (req, res) => {
+		try {
+			const entity = User.findByPk(req.params.id);
+			await entity.updateUser(req.body)
+			await entity.save() // not working yet
 
-		users.findByIdAndUpdate(id, { $set: req.body }, (err) => {
-			if (!err) {
-				res.status(200).send({ message: 'User updated!' });
-			} else {
-				res.status(500).send({ message: err.message });
-			}
-		});
+		} catch (error) {
+			res.status(500).send({ message: `${error.message}` });
+		}
 	};
 
 	// HOW SHOULD WE DELETE A USER?
 	static deleteUser = (req, res) => {
-		const id = req.params.id;
-
-		users.findByIdAndDelete(id, (err) => {
-			if (!err) {
-				res.status(200).send({ message: 'User removed' });
-			} else {
-				res.status(500).send({ message: err.message });
-			}
-		});
+		// 	const id = req.params.id;
+		// 	users.findByIdAndDelete(id, (err) => {
+		// 		if (!err) {
+		// 			res.status(200).send({ message: 'User removed' });
+		// 		} else {
+		// 			res.status(500).send({ message: err.message });
+		// 		}
+		// 	});
 	};
 }
 

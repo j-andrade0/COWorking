@@ -1,14 +1,17 @@
-import express from "express";
-import db from "./config/dbConnect.js"
-import routes from "./routes/index.js"
+import express from 'express';
+import db from './config/dbConnect.js';
+import User from './models/User.js';
+import routes from './routes/index.js';
 
-db.on("error", console.log.bind(console, 'Error on database connection!'))
-db.once("open", () => {
-  console.log('Database connection successful!')
-})
+try {
+	await db.sync({ force: true }); // dev config, maybe should be db.sync() on prod
+	console.warn('All models were synchronized successfully.');
+} catch (error) {
+	console.error(error);
+}
 
 const app = express();
-app.use(express.json())
+app.use(express.json());
 routes(app);
 
-export default app
+export default app;

@@ -1,20 +1,56 @@
-import mongoose from "mongoose";
+import { DataTypes } from 'sequelize';
+import db from '../config/dbConnect.js';
 
-const userSchema = new mongoose.Schema(
-  {
-    id: {type: String},
-    name: {type: String, required: true},
-    cpf: {type: String, required: true},
-    email: {type: String, required: true},
-    birthDate: {type: String, required: true}, // MUST BE A DATE FORMAT
-    phoneNumber: {type: String},
-    password: {type: String, required: true}, // MUST BE ENCRYPTED
-    profilePhoto: {type: String},
-    balanceAccount: {type: Number},
-    // city: {type: mongoose.Schema.Types.ObjectId, ref: 'city', required: true} // MUST BE RELATIONAL - CITY.NAME
-  }
+const User = db.define(
+	'User',
+	{
+		id: {
+			type: DataTypes.INTEGER,
+			autoIncrement: true,
+			primaryKey: true,
+		},
+		firstName: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		lastName: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		cpf: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		email: {
+			type: DataTypes.STRING(320),
+			allowNull: false,
+		},
+		birthDate: {
+			type: DataTypes.DATEONLY,
+			allowNull: false
+		},
+		phoneNumber: {
+			type: DataTypes.STRING(15),
+			allowNull: false,
+		},
+		password: {
+			type: DataTypes.STRING(99),
+			allowNull: false,
+		},
+		profilePhoto: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		balanceAccount: {
+			type: DataTypes.DECIMAL(6, 2),
+			allowNull: false,
+			defaultValue: 0.00,
+		}
+		// add a city relationship
+	},
+	{
+		tableName: 'Users',
+	}
 );
 
-const users = mongoose.model('users', userSchema);
-
-export default users;
+export default User;
