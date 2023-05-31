@@ -1,12 +1,10 @@
-import express from 'express';
-
+import express, { json } from 'express';
+import swaggerUi from 'swagger-ui-express';
 import users from './userRoutes.js';
+import swaggerFile from '../../swagger_output.json' assert { type: 'json' };
 
 const routes = (app) => {
-	app.route('/').get((req, res) => {
-		res.status(200).send('Curso de node!');
-	});
-
+	app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 	app.use(express.json(), users);
 };
 

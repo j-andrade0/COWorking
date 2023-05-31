@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "start": "node swagger.js\nnode server.js"
   },
   "prettier": {
     "tabWidth": 4,
@@ -13,7 +14,8 @@
     "semi": true,
     "singleQuote": true,
     "arrowParens": "always",
-    "requirePragma": false
+    "requirePragma": false,
+    "trailingComma" : "none"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
@@ -21,7 +23,9 @@
   "dependencies": {
     "express": "^4.17.3",
     "mysql2": "^3.3.2",
-    "sequelize": "^6.31.1"
+    "sequelize": "^6.31.1",
+    "swagger-autogen": "^2.23.1",
+    "swagger-ui-express": "^4.1.4"
   },
   "author": "José Antonio de Andrade",
   "description": "",
