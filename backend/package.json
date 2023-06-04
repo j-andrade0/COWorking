@@ -15,7 +15,8 @@
     "singleQuote": true,
     "arrowParens": "always",
     "requirePragma": false,
-    "trailingComma" : "none"
+    "trailingComma" : "none",
+    "printWidth": 100
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

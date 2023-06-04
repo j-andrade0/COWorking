@@ -47,7 +47,24 @@ router.put('/users/:id', UserController.updateUser, () => {
 	} 
 	*/
 	/* #swagger.responses[200] */
+	/*#swagger.responses[400]*/
 	/* #swagger.responses[500] */
+});
+
+router.patch('/users/name/:id', UserController.updateUserName, () => {
+	/* #swagger.tags = ['User']*/
+});
+
+router.patch('/users/password/:id', UserController.updateUserPassword, () => {
+	/* #swagger.tags = ['User']*/
+});
+
+router.patch('/users/profilePhoto/:id', UserController.updateUserProfilePhoto, () => {
+	/* #swagger.tags = ['User']*/
+});
+
+router.patch('/users/email/:id', UserController.updateUserEmail, () => {
+	/* #swagger.tags = ['User']*/
 });
 
 router.delete('/users/:id', UserController.deleteUser, () => {
