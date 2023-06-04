@@ -48,6 +48,75 @@ class UserController {
 		}
 	};
 
+	static updateUserName = async (req, res) => {
+		try {
+			const entity = await User.findByPk(req.params.id);
+			if (entity) {
+				entity.set({
+					firstName: req.body.firstName,
+					lastName: req.body.lastName
+				});
+				await entity.save();
+				res.status(200).json(entity);
+			} else {
+				res.status(400).send({ message: `Id ${id} not found!` });
+			}
+		} catch (error) {
+			res.status(500).send({ message: `${error.message}` });
+		}
+	};
+
+	static updateUserProfilePhoto = async (req, res) => {
+		try {
+			const entity = await User.findByPk(req.params.id);
+			if (entity) {
+				entity.set({
+					profilePhoto: req.body.profilePhoto
+				});
+				await entity.save();
+				res.status(200).json(entity);
+			} else {
+				res.status(400).send({ message: `Id ${id} not found!` });
+			}
+		} catch (error) {
+			res.status(500).send({ message: `${error.message}` });
+		}
+	};
+
+	static updateUserPassword = async (req, res) => {
+		try {
+			const entity = await User.findByPk(req.params.id);
+			if (entity) {
+				entity.set({
+					password: req.body.password
+				});
+				await entity.save();
+				res.status(200).json(entity);
+			} else {
+				res.status(400).send({ message: `Id ${id} not found!` });	
+			}
+		} catch (error) {
+			res.status(500).send({ message: `${error.message}` });
+		}
+	};
+
+	static updateUserEmail = async (req, res) => {
+		try {
+			const entity = await User.findByPk(req.params.id);
+			if (entity) {
+				entity.set({
+					email: req.body.email
+				});
+				await entity.save();
+				res.status(200).json(entity);
+			} else {
+				res.status(400).send({ message: `Id ${id} not found!` });
+			}
+		} catch (error) {
+			res.status(500).send({ message: `${error.message}` });
+		}
+	};
+
 	static deleteUser = (req, res) => {
 		// aply soft delete
 	};
