@@ -1,7 +1,8 @@
 import swaggerAutogen from 'swagger-autogen';
 
 const outputFile = './swagger_output.json';
-const endpointsFile = ['./src/routes/userRoutes.js'];
+const endpointsFile = ['./src/routes/userRoutes.js', './src/routes/ownerRoutes.js'];
+
 
 const doc = {
 	info: {
@@ -18,6 +19,10 @@ const doc = {
 		{
 			name: 'User',
 			description: "User's endpoint"
+		},
+		{
+			name: 'Owner',
+			description: "Owner's endpoint"
 		}
 	],
 	definitions: {
