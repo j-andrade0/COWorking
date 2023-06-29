@@ -25,7 +25,7 @@ router.post('/owners', OwnerController.createEntity, () => {
 		in: 'body',
 		description: 'Informações do usuário.',
 		required: true,
-		schema: { $ref: "#/definitions/CreateUser" }
+		schema: { $ref: "#/definitions/CreateOwner" }
 	} */
 	/* #swagger.responses[201] */
 	/* #swagger.responses[500] */

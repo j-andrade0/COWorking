@@ -28,37 +28,42 @@ const doc = {
 	definitions: {
 		User: {
 			id: '0293498asdfh384734ghfhk',
-			name: 'Manoel Gomes',
+			firstName: 'José',
+			lastName: 'Silva',
 			cpf: '000.000.000-00',
-			email: 'manoelgomes@gmail.com',
-			birthDate: '02/12/1969',
+			email: 'silvajose@gmail.com',
+			birthDate: '02/12/1978',
 			phoneNumber: '(99)99999-9999',
-			password: 'canetaAzuuul',
+			password: '1237csdf439',
 			profilePhoto:
-				'/users/profilePhotos/ícone-brasileiro-id:3128758325.jpg',
-			balanceAccount: 0
+				'/users/profilePhotos/id:3128758325.jpg',
+			balanceAccount: 0.00
 			// Adicionar cidade na documentacao
 		},
 		CreateUser: {
-			$name: 'Manoel Gomes',
+			$firstName: 'José',
+			$lastName: 'Silva',
 			$cpf: '000.000.000-00',
-			$email: 'manoelgomes@gmail.com',
-			$birthDate: '02/12/1969',
+			$email: 'silvajose@gmail.com',
+			$birthDate: '02/12/1978',
 			$phoneNumber: '(99)99999-9999',
-			$password: 'canetaAzuuul',
+			$password: '234rhkwdhfk89',
 			profilePhoto:
-				'/users/profilePhotos/ícone-brasileiro-id:3128758325.jpg'
+				'/users/profilePhotos/id:3128758325.jpg'
 			// Adicionar cidade na documentacao
 		},
-		UpdateUser: {
-			$name: 'Manoel Gomes',
-			$cpf: '000.000.000-00',
-			$email: 'manoelgomes@gmail.com',
-			$birthDate: '02/12/1969',
+		CreateOwner: {
+			$nomeEmpresarial: "Marcio Souza EIRELI",
+			$nomeFantasia: "Marcio Embalagens",
+			$firstName: '',
+			$lastName: '',
+			$document: '000.000.000-00',
+			$email: 'silvajose@gmail.com',
 			$phoneNumber: '(99)99999-9999',
-			$password: 'canetaAzuuul',
+			$password: '234rhkwdhfk89',
 			profilePhoto:
-				'/users/profilePhotos/ícone-brasileiro-id:3128758325.jpg'
+				'/users/profilePhotos/id:3128758325.jpg'
+			// Adicionar cidade na documentacao
 		}
 	}
 };

@@ -600,9 +600,13 @@
           "type": "string",
           "example": "0293498asdfh384734ghfhk"
         },
-        "name": {
+        "firstName": {
           "type": "string",
-          "example": "Manoel Gomes"
+          "example": "José"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "Silva"
         },
         "cpf": {
           "type": "string",
@@ -610,11 +614,11 @@
         },
         "email": {
           "type": "string",
-          "example": "manoelgomes@gmail.com"
+          "example": "silvajose@gmail.com"
         },
         "birthDate": {
           "type": "string",
-          "example": "02/12/1969"
+          "example": "02/12/1978"
         },
         "phoneNumber": {
           "type": "string",
@@ -622,11 +626,11 @@
         },
         "password": {
           "type": "string",
-          "example": "canetaAzuuul"
+          "example": "1237csdf439"
         },
         "profilePhoto": {
           "type": "string",
-          "example": "/users/profilePhotos/ícone-brasileiro-id:3128758325.jpg"
+          "example": "/users/profilePhotos/id:3128758325.jpg"
         },
         "balanceAccount": {
           "type": "number",
@@ -637,9 +641,13 @@
     "CreateUser": {
       "type": "object",
       "properties": {
-        "name": {
+        "firstName": {
           "type": "string",
-          "example": "Manoel Gomes"
+          "example": "José"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "Silva"
         },
         "cpf": {
           "type": "string",
@@ -647,11 +655,11 @@
         },
         "email": {
           "type": "string",
-          "example": "manoelgomes@gmail.com"
+          "example": "silvajose@gmail.com"
         },
         "birthDate": {
           "type": "string",
-          "example": "02/12/1969"
+          "example": "02/12/1978"
         },
         "phoneNumber": {
           "type": "string",
@@ -659,56 +667,16 @@
         },
         "password": {
           "type": "string",
-          "example": "canetaAzuuul"
+          "example": "234rhkwdhfk89"
         },
         "profilePhoto": {
           "type": "string",
-          "example": "/users/profilePhotos/ícone-brasileiro-id:3128758325.jpg"
+          "example": "/users/profilePhotos/id:3128758325.jpg"
         }
       },
       "required": [
-        "name",
-        "cpf",
-        "email",
-        "birthDate",
-        "phoneNumber",
-        "password"
-      ]
-    },
-    "UpdateUser": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "example": "Manoel Gomes"
-        },
-        "cpf": {
-          "type": "string",
-          "example": "000.000.000-00"
-        },
-        "email": {
-          "type": "string",
-          "example": "manoelgomes@gmail.com"
-        },
-        "birthDate": {
-          "type": "string",
-          "example": "02/12/1969"
-        },
-        "phoneNumber": {
-          "type": "string",
-          "example": "(99)99999-9999"
-        },
-        "password": {
-          "type": "string",
-          "example": "canetaAzuuul"
-        },
-        "profilePhoto": {
-          "type": "string",
-          "example": "/users/profilePhotos/ícone-brasileiro-id:3128758325.jpg"
-        }
-      },
-      "required": [
-        "name",
+        "firstName",
+        "lastName",
         "cpf",
         "email",
         "birthDate",
