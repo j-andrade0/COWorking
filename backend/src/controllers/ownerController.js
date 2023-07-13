@@ -31,7 +31,11 @@ class OwnerController {
 			await Entity.create(req.body);
 			res.status(201).send({ message: 'Entity created!' });
 		} catch (error) {
-			res.status(500).send({ message: `${error.message}` });
+			if (error.name == 'SequelizeUniqueConstraintError') {
+				res.status(400).send({ message: 'Values already registered' });
+			} else {
+				res.status(500).send({ message: `${error.message}` });
+			}
 		}
 	};
 
@@ -45,7 +49,11 @@ class OwnerController {
 				res.status(400).send({ message: `Id ${id} not found!` });
 			}
 		} catch (error) {
-			res.status(500).send({ message: `${error.message}` });
+			if (error.name == 'SequelizeUniqueConstraintError') {
+				res.status(400).send({ message: 'Values already registered' });
+			} else {
+				res.status(500).send({ message: `${error.message}` });
+			}
 		}
 	};
 
@@ -82,7 +90,11 @@ class OwnerController {
 				res.status(400).send({ message: `Id ${id} not found!` });
 			}
 		} catch (error) {
-			res.status(500).send({ message: `${error.message}` });
+			if (error.name == 'SequelizeUniqueConstraintError') {
+				res.status(400).send({ message: 'Values already registered' });
+			} else {
+				res.status(500).send({ message: `${error.message}` });
+			}
 		}
 	};
 
@@ -116,7 +128,11 @@ class OwnerController {
 				res.status(400).send({ message: `Id ${id} not found!` });
 			}
 		} catch (error) {
-			res.status(500).send({ message: `${error.message}` });
+			if (error.name == 'SequelizeUniqueConstraintError') {
+				res.status(400).send({ message: 'Values already registered' });
+			} else {
+				res.status(500).send({ message: `${error.message}` });
+			}
 		}
 	};
 }
