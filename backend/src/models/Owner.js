@@ -30,7 +30,8 @@ const Owner = db.define('Owner', {
 	},
 	email: {
 		type: DataTypes.STRING,
-		allowNull: false
+		allowNull: false,
+		unique: true
 	},
 	phoneNumber: {
 		type: DataTypes.STRING,
@@ -43,7 +44,8 @@ const Owner = db.define('Owner', {
 	},
 	profilePhoto: {
 		type: DataTypes.STRING,
-		allowNull: true
+		allowNull: true,
+		unique: true
 	},
     // add bankAccount Relationship
 });
