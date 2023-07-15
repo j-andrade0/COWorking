@@ -46,7 +46,7 @@ class OwnerController {
 				await entity.update(req.body);
 				res.status(200).json(entity);
 			} else {
-				res.status(400).send({ message: `Id ${id} not found!` });
+				res.status(400).send({ message: `Id ${req.params.id} not found!` });
 			}
 		} catch (error) {
 			if (error.name == 'SequelizeUniqueConstraintError') {
@@ -70,7 +70,7 @@ class OwnerController {
 				await entity.save();
 				res.status(200).json(entity);
 			} else {
-				res.status(400).send({ message: `Id ${id} not found!` });
+				res.status(400).send({ message: `Id ${req.params.id} not found!` });
 			}
 		} catch (error) {
 			res.status(500).send({ message: `${error.message}` });
@@ -87,7 +87,7 @@ class OwnerController {
 				await entity.save();
 				res.status(200).json(entity);
 			} else {
-				res.status(400).send({ message: `Id ${id} not found!` });
+				res.status(400).send({ message: `Id ${req.params.id} not found!` });
 			}
 		} catch (error) {
 			if (error.name == 'SequelizeUniqueConstraintError') {
@@ -108,7 +108,7 @@ class OwnerController {
 				await entity.save();
 				res.status(200).json(entity);
 			} else {
-				res.status(400).send({ message: `Id ${id} not found!` });
+				res.status(400).send({ message: `Id ${req.params.id} not found!` });
 			}
 		} catch (error) {
 			res.status(500).send({ message: `${error.message}` });
@@ -125,7 +125,7 @@ class OwnerController {
 				await entity.save();
 				res.status(200).json(entity);
 			} else {
-				res.status(400).send({ message: `Id ${id} not found!` });
+				res.status(400).send({ message: `Id ${req.params.id} not found!` });
 			}
 		} catch (error) {
 			if (error.name == 'SequelizeUniqueConstraintError') {
