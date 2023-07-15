@@ -3,7 +3,7 @@ import UserController from '../controllers/userController.js';
 
 const router = express.Router();
 
-router.get('/users', UserController.getAllUsers, () => {
+router.get('/users', UserController.getAllEntities, () => {
 	/* #swagger.tags = ['User']*/
 	/* #swagger.responses[200] = { 
 		schema: { $ref: "#/definitions/User" },
@@ -11,7 +11,7 @@ router.get('/users', UserController.getAllUsers, () => {
 	/* #swagger.responses[500]*/
 });
 
-router.get('/users/:id', UserController.getUserById, () => {
+router.get('/users/:id', UserController.getEntityById, () => {
 	/* #swagger.tags = ['User']*/
 	/* #swagger.responses[200] = { 
 		schema: { $ref: "#/definitions/User" },
@@ -19,7 +19,7 @@ router.get('/users/:id', UserController.getUserById, () => {
 	/* #swagger.responses[400] */
 });
 
-router.post('/users', UserController.createUser, () => {
+router.post('/users', UserController.createEntity, () => {
 	/* #swagger.tags = ['User']*/
 	/* #swagger.parameters['newUser'] = {
 		in: 'body',
@@ -31,7 +31,7 @@ router.post('/users', UserController.createUser, () => {
 	/* #swagger.responses[500] */
 });
 
-router.put('/users/:id', UserController.updateUser, () => {
+router.put('/users/:id', UserController.updateFullEntity, () => {
 	/* #swagger.tags = ['User']*/
 	/* #swagger.parameters['id'] = {
 		"in": "path",
@@ -51,23 +51,23 @@ router.put('/users/:id', UserController.updateUser, () => {
 	/* #swagger.responses[500] */
 });
 
-router.patch('/users/name/:id', UserController.updateUserName, () => {
+router.patch('/users/name/:id', UserController.updateEntityName, () => {
 	/* #swagger.tags = ['User']*/
 });
 
-router.patch('/users/password/:id', UserController.updateUserPassword, () => {
+router.patch('/users/password/:id', UserController.updateEntityPassword, () => {
 	/* #swagger.tags = ['User']*/
 });
 
-router.patch('/users/profilePhoto/:id', UserController.updateUserProfilePhoto, () => {
+router.patch('/users/profilePhoto/:id', UserController.updateEntityProfilePhoto, () => {
 	/* #swagger.tags = ['User']*/
 });
 
-router.patch('/users/email/:id', UserController.updateUserEmail, () => {
+router.patch('/users/email/:id', UserController.updateEntityEmail, () => {
 	/* #swagger.tags = ['User']*/
 });
 
-router.delete('/users/:id', UserController.deleteUser, () => {
+router.delete('/users/:id', UserController.deleteEntity, () => {
 	/* #swagger.tags = ['User']*/
 	/* #swagger.responses[200] */
 	/* #swagger.responses[500] */
