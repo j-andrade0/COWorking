@@ -1,7 +1,7 @@
 import User from '../models/User.js';
 
 class UserController {
-	static getAllUsers = async (req, res) => {
+	static getAllEntities = async (req, res) => {
 		try {
 			const users = await User.findAll();
 			res.status(200).json(users);
@@ -10,7 +10,7 @@ class UserController {
 		}
 	};
 
-	static getUserById = async (req, res) => {
+	static getEntityById = async (req, res) => {
 		try {
 			const entity = await User.findByPk(req.params.id);
 			if (entity) {
@@ -25,7 +25,7 @@ class UserController {
 		}
 	};
 
-	static createUser = async (req, res) => {
+	static createEntity = async (req, res) => {
 		try {
 			await User.create(req.body);
 			res.status(201).send({ message: 'Entity created!' });
@@ -38,14 +38,14 @@ class UserController {
 		}
 	};
 
-	static updateUser = async (req, res) => {
+	static updateFullEntity = async (req, res) => {
 		try {
 			const entity = await User.findByPk(req.params.id);
 			if (entity) {
 				await entity.update(req.body);
 				res.status(200).json(entity);
 			} else {
-				res.status(400).send({ message: `Id ${req.params.id} not found!`});	
+				res.status(400).send({ message: `Id ${req.params.id} not found!` });
 			}
 		} catch (error) {
 			if (error.name == 'SequelizeUniqueConstraintError') {
@@ -56,7 +56,7 @@ class UserController {
 		}
 	};
 
-	static updateUserName = async (req, res) => {
+	static updateEntityName = async (req, res) => {
 		try {
 			const entity = await User.findByPk(req.params.id);
 			if (entity) {
@@ -67,14 +67,14 @@ class UserController {
 				await entity.save();
 				res.status(200).json(entity);
 			} else {
-				res.status(400).send({ message: `Id ${req.params.id} not found!`});	
+				res.status(400).send({ message: `Id ${req.params.id} not found!` });
 			}
 		} catch (error) {
 			res.status(500).send({ message: `${error.message}` });
 		}
 	};
 
-	static updateUserProfilePhoto = async (req, res) => {
+	static updateEntityProfilePhoto = async (req, res) => {
 		try {
 			const entity = await User.findByPk(req.params.id);
 			if (entity) {
@@ -95,7 +95,7 @@ class UserController {
 		}
 	};
 
-	static updateUserPassword = async (req, res) => {
+	static updateEntityPassword = async (req, res) => {
 		try {
 			const entity = await User.findByPk(req.params.id);
 			if (entity) {
@@ -112,7 +112,7 @@ class UserController {
 		}
 	};
 
-	static updateUserEmail = async (req, res) => {
+	static updateEntityEmail = async (req, res) => {
 		try {
 			const entity = await User.findByPk(req.params.id);
 			if (entity) {
@@ -133,7 +133,7 @@ class UserController {
 		}
 	};
 
-	static deleteUser = (req, res) => {
+	static deleteEntity = (req, res) => {
 		// aply soft delete
 	};
 }
