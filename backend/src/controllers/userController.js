@@ -56,6 +56,8 @@ class UserController {
 				res.status(400).send({ error: `${error}` });
 			} else if (error instanceof NoEntityError) {
 				res.status(400).send({ error: `${error}` });
+			} else if (error.name == 'SequelizeUniqueConstraintError') {
+				res.status(400).send({ message: 'Values already registered' });
 			} else {
 				res.status(500).send({ error: `${error}` });
 			}
@@ -107,6 +109,8 @@ class UserController {
 				res.status(400).send({ error: `${error}` });
 			} else if (error instanceof NoEntityError) {
 				res.status(400).send({ error: `${error}` });
+			} else if (error.name == 'SequelizeUniqueConstraintError') {
+				res.status(400).send({ message: 'Values already registered' });
 			} else {
 				res.status(500).send({ error: `${error}` });
 			}
@@ -157,6 +161,8 @@ class UserController {
 				res.status(400).send({ error: `${error}` });
 			} else if (error instanceof NoEntityError) {
 				res.status(400).send({ error: `${error}` });
+			} else if (error.name == 'SequelizeUniqueConstraintError') {
+				res.status(400).send({ message: 'Values already registered' });
 			} else {
 				res.status(500).send({ error: `${error}` });
 			}
