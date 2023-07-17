@@ -1,6 +1,6 @@
 import Entity from '../models/User.js';
-import ValidationError from '../util/ValidationError.js';
-import NoEntityError from '../util/NoEntityError.js';
+import ValidationError from '../util/customErrors/ValidationError.js';
+import NoEntityError from '../util/customErrors/NoEntityError.js';
 
 class UserController {
 	static getAllEntities = async (req, res) => {

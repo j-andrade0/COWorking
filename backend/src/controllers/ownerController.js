@@ -1,8 +1,8 @@
 import { InstanceError } from 'sequelize';
 import Owner from '../models/Owner.js';
 import Entity from '../models/Owner.js';
-import ValidationError from '../util/ValidationError.js';
-import NoEntityError from '../util/NoEntityError.js';
+import ValidationError from '../util/customErrors/ValidationError.js';
+import NoEntityError from '../util/customErrors/NoEntityError.js';
 
 class OwnerController {
 	static getAllEntities = async (req, res) => {
