@@ -58,6 +58,8 @@ class OwnerController {
 				res.status(400).send({ error: `${error}` });
 			} else if (error instanceof NoEntityError) {
 				res.status(400).send({ error: `${error}` });
+			} else if (error.name == 'SequelizeUniqueConstraintError') {
+				res.status(400).send({ message: 'Values already registered' });
 			} else {
 				res.status(500).send({ error: `${error}` });
 			}
@@ -70,7 +72,12 @@ class OwnerController {
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
 			}
-			if (!req.body.firstName || !req.body.lastName || !req.body.nomeEmpresarial || !req.body.nomeFantasia) {
+			if (
+				!req.body.firstName ||
+				!req.body.lastName ||
+				!req.body.nomeEmpresarial ||
+				!req.body.nomeFantasia
+			) {
 				throw new ValidationError('No name provided!');
 			}
 			entity.set({
@@ -111,6 +118,8 @@ class OwnerController {
 				res.status(400).send({ error: `${error}` });
 			} else if (error instanceof NoEntityError) {
 				res.status(400).send({ error: `${error}` });
+			} else if (error.name == 'SequelizeUniqueConstraintError') {
+				res.status(400).send({ message: 'Values already registered' });
 			} else {
 				res.status(500).send({ error: `${error}` });
 			}
@@ -161,6 +170,8 @@ class OwnerController {
 				res.status(400).send({ error: `${error}` });
 			} else if (error instanceof NoEntityError) {
 				res.status(400).send({ error: `${error}` });
+			} else if (error.name == 'SequelizeUniqueConstraintError') {
+				res.status(400).send({ message: 'Values already registered' });
 			} else {
 				res.status(500).send({ error: `${error}` });
 			}
