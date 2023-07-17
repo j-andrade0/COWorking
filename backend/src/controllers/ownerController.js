@@ -48,8 +48,8 @@ class OwnerController {
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
 			}
-			if (!req.body.password) {
-				throw new ValidationError('No password provided!');
+			if (!req.body) {
+				throw new ValidationError('No body provided!');
 			}
 			await entity.update(req.body);
 			res.status(200).json(entity);
@@ -70,8 +70,8 @@ class OwnerController {
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
 			}
-			if (!req.body.password) {
-				throw new ValidationError('No password provided!');
+			if (!req.body.firstName || !req.body.lastName || !req.body.nomeEmpresarial || !req.body.nomeFantasia) {
+				throw new ValidationError('No name provided!');
 			}
 			entity.set({
 				firstName: req.body.firstName,
@@ -98,8 +98,8 @@ class OwnerController {
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
 			}
-			if (!req.body.password) {
-				throw new ValidationError('No password provided!');
+			if (!req.body.profilePhoto) {
+				throw new ValidationError('No path to profile photo provided!');
 			}
 			entity.set({
 				profilePhoto: req.body.profilePhoto
@@ -148,8 +148,8 @@ class OwnerController {
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
 			}
-			if (!req.body.password) {
-				throw new ValidationError('No password provided!');
+			if (!req.body.email) {
+				throw new ValidationError('No email provided!');
 			}
 			entity.set({
 				email: req.body.email
