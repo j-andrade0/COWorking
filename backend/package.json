@@ -1,34 +1,35 @@
 {
-  "name": "coworking-backend",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.js",
-    "start": "node swagger.js\nnode server.js"
-  },
-  "prettier": {
-    "tabWidth": 4,
-    "useTabs": true,
-    "semi": true,
-    "singleQuote": true,
-    "arrowParens": "always",
-    "requirePragma": false,
-    "trailingComma" : "none",
-    "printWidth": 100
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.15"
-  },
-  "dependencies": {
-    "express": "^4.17.3",
-    "mysql2": "^3.3.2",
-    "sequelize": "^6.31.1",
-    "swagger-autogen": "^2.23.1",
-    "swagger-ui-express": "^4.1.4"
-  },
-  "author": "José Antonio de Andrade",
-  "description": "",
-  "type": "module"
+	"name": "coworking-backend",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"dev": "nodemon server.js",
+		"start": "node swagger.js\nnode server.js"
+	},
+	"prettier": {
+		"tabWidth": 4,
+		"useTabs": true,
+		"semi": true,
+		"singleQuote": true,
+		"arrowParens": "always",
+		"requirePragma": false,
+		"trailingComma": "none",
+		"printWidth": 100
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.15"
+	},
+	"dependencies": {
+		"express": "^4.17.3",
+		"mysql2": "^3.3.2",
+		"sequelize": "^6.31.1",
+		"speakeasy": "^2.0.0",
+		"swagger-autogen": "^2.23.1",
+		"swagger-ui-express": "^4.1.4"
+	},
+	"author": "José Antonio de Andrade",
+	"description": "",
+	"type": "module"
 }

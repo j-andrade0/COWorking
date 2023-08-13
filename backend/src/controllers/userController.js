@@ -1,6 +1,7 @@
 import Entity from '../models/User.js';
 import ValidationError from '../util/customErrors/ValidationError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
+import speakeasy from 'speakeasy';
 
 class UserController {
 	static getAllEntities = async (req, res) => {
@@ -29,8 +30,21 @@ class UserController {
 
 	static createEntity = async (req, res) => {
 		try {
-			await Entity.create(req.body);
-			res.status(201).send({ message: 'Entity created!' });
+			const temp_secret = speakeasy.generateSecret();
+			await Entity.create({
+				firstName: req.body.firstName,
+				lastName: req.body.lastName,
+				cpf: req.body.cpf,
+				email: req.body.email,
+				secret: temp_secret.base32,
+				isTempSecret: true,
+				birthDate: req.body.birthDate,
+				phoneNumber: req.body.phoneNumber,
+				profilePhoto: req.body.profilePhoto
+			});
+			res.status(201).send({
+				qrCodeUrl: `${temp_secret.otpauth_url}`
+			});
 		} catch (error) {
 			if (error.name == 'SequelizeUniqueConstraintError') {
 				res.status(400).send({ message: 'Values already registered' });

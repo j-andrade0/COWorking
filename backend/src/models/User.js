@@ -27,6 +27,15 @@ const User = db.define(
 			allowNull: false,
 			unique: true
 		},
+		secret: {
+			type: DataTypes.STRING,
+			allowNull: false,
+			unique: true
+		},
+		isTempSecret: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false
+		},
 		birthDate: {
 			type: DataTypes.DATEONLY,
 			allowNull: false
@@ -35,10 +44,6 @@ const User = db.define(
 			type: DataTypes.STRING(15),
 			allowNull: false,
 			unique: true
-		},
-		password: {
-			type: DataTypes.STRING(99),
-			allowNull: false
 		},
 		profilePhoto: {
 			type: DataTypes.STRING,

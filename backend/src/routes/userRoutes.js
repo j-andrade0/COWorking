@@ -1,5 +1,6 @@
 import express from 'express';
 import UserController from '../controllers/userController.js';
+import UserAuth from '../controllers/auth/userAuth.js';
 
 const router = express.Router();
 
@@ -65,6 +66,22 @@ router.patch('/users/profilePhoto/:id', UserController.updateEntityProfilePhoto,
 
 router.patch('/users/email/:id', UserController.updateEntityEmail, () => {
 	/* #swagger.tags = ['User']*/
+});
+
+router.patch('users/newSecret', UserAuth.newSecret, ()=>{
+	/* */
+});
+
+router.post('/validadeToken', UserAuth.validateToken, ()=>{
+	/* #swagger.tags = ['User'] */
+})
+
+router.post('/verifyToken', UserAuth.verifyToken, ()=>{
+	/* #swagger.tags = ['User'] */
+})
+
+router.post('/userLogin', UserAuth.login, () => {
+	/* #swagger.tags = ['User'] */
 });
 
 router.delete('/users/:id', UserController.deleteEntity, () => {
