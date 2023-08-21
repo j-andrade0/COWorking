@@ -1,23 +1,98 @@
+import Entity from '../../models/User.js';
+import NoEntityError from '../../util/customErrors/NoEntityError.js';
+import speakeasy from 'speakeasy';
+
 class UserAuth {
-	static validateToken = (req, res) => {
-		// const { userId, token } = req.body;
-		// transform a temp_secret into a permanent 'secret', after the user create a account, this is just needed in the first login.
-		// query in the db to get the user, if user.isTempSecret is true, turns to false
-		// this.verifyToken;
+	static login = async (req, res) => {
+		try {
+			const tokenCheckResult = await this.checkToken(req.body);
+
+			if (tokenCheckResult) {
+				return res.sendStatus(200);
+			} else {
+				return res.sendStatus(401);
+			}
+		} catch (error) {
+			res.sendStatus(400).json({ error: error.message });
+		}
+		// add - jwt
+	};
+
+	static checkToken = async (body) => {
+		try {
+			const userId = body.userId;
+			const token = body.token;
+			const entity = await Entity.findByPk(userId);
+
+			if (!entity) {
+				throw new NoEntityError('Entity not found');
+			}
+
+			const isVerifiedToken = await this.verifyToken(entity, token);
+			const isValidToken = this.validateToken(entity, token);
+
+			if (!isVerifiedToken || !isValidToken) {
+				return false;
+			}
+
+			return true;
+		} catch (error) {
+			return false;
+		}
+	};
+
+	static verifyToken = async (entity, token) => {
+		// verify if the token is temporary, if it is, then turns it to permanent. If it is not, just
+		// returns that is verified. Returns true or false
+		try {
+			if (entity.isTempSecret) {
+				const secret = entity.secret;
+
+				const verified = speakeasy.totp.verify({
+					secret,
+					encoding: 'base32',
+					token
+				});
+
+				if (!verified) {
+					return false;
+				}
+
+				entity.set({
+					isTempSecret: false
+				});
+				await entity.save();
+
+				return true;
+			} else {
+				return true;
+			}
+		} catch {
+			throw new Error('Error on verifying');
+		}
+	};
+
+	static validateToken = (entity, token) => {
+		// validate if the token provided is valid, returns true of false
+		try {
+			const secret = entity.secret;
+
+			const isValidToken = speakeasy.totp.verify({
+				secret,
+				encoding: 'base32',
+				token,
+				window: 1
+			});
+
+			return isValidToken;
+		} catch (error) {
+			throw new Error('Error on validating');
+		}
 	};
 
 	static newSecret = (req, res) => {
 		// A user creates a account, but close the app before validating it, in that case, the user don't have a token code in the authenticator app, and needs a new secret.
 		// query in the db user table, if the column 'isTempSecret' is true, prove that the user never validate the token.
-	};
-
-	static verifyToken = (req, res) => {
-		// verify if the token provided is valid, responses: 200 or 400
-	};
-
-	static login = (req, res) => {
-		// this.verifyToken
-		// add - jwt
 	};
 }
 export default UserAuth;

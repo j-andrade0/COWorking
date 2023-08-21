@@ -36,10 +36,10 @@ const User = db.define(
 			type: DataTypes.BOOLEAN,
 			allowNull: false
 		},
-		birthDate: {
-			type: DataTypes.DATEONLY,
-			allowNull: false
-		},
+		// birthDate: {  // problems with formatting
+		// 	type: DataTypes.DATEONLY,
+		// 	allowNull: false
+		// },
 		phoneNumber: {
 			type: DataTypes.STRING(15),
 			allowNull: false,

@@ -31,18 +31,19 @@ class UserController {
 	static createEntity = async (req, res) => {
 		try {
 			const temp_secret = speakeasy.generateSecret();
-			await Entity.create({
+			const createdEntity =  await Entity.create({
 				firstName: req.body.firstName,
 				lastName: req.body.lastName,
 				cpf: req.body.cpf,
 				email: req.body.email,
 				secret: temp_secret.base32,
 				isTempSecret: true,
-				birthDate: req.body.birthDate,
+				// birthDate: req.body.birthDate, //problems with formatting
 				phoneNumber: req.body.phoneNumber,
 				profilePhoto: req.body.profilePhoto
 			});
 			res.status(201).send({
+				userId : createdEntity.id,
 				qrCodeUrl: `${temp_secret.otpauth_url}`
 			});
 		} catch (error) {
