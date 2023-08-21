@@ -66,6 +66,9 @@
           "201": {
             "description": "Created"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -317,6 +320,53 @@
         }
       }
     },
+    "users/newSecret": {
+      "patch": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/validadeToken": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/verifyToken": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/userLogin": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
     "/owners": {
       "get": {
         "tags": [
@@ -348,13 +398,16 @@
             "description": "Informações do usuário.",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/CreateUser"
+              "$ref": "#/definitions/CreateOwner"
             }
           }
         ],
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "500": {
             "description": "Internal Server Error"
@@ -451,10 +504,10 @@
                 "lastName": {
                   "example": "any"
                 },
-                "nomeFantasia": {
+                "nomeEmpresarial": {
                   "example": "any"
                 },
-                "nomeEmpresarial": {
+                "nomeFantasia": {
                   "example": "any"
                 }
               }
@@ -680,6 +733,57 @@
         "cpf",
         "email",
         "birthDate",
+        "phoneNumber",
+        "password"
+      ]
+    },
+    "CreateOwner": {
+      "type": "object",
+      "properties": {
+        "nomeEmpresarial": {
+          "type": "string",
+          "example": "Marcio Souza EIRELI"
+        },
+        "nomeFantasia": {
+          "type": "string",
+          "example": "Marcio Embalagens"
+        },
+        "firstName": {
+          "type": "string",
+          "example": ""
+        },
+        "lastName": {
+          "type": "string",
+          "example": ""
+        },
+        "document": {
+          "type": "string",
+          "example": "000.000.000-00"
+        },
+        "email": {
+          "type": "string",
+          "example": "silvajose@gmail.com"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "example": "(99)99999-9999"
+        },
+        "password": {
+          "type": "string",
+          "example": "234rhkwdhfk89"
+        },
+        "profilePhoto": {
+          "type": "string",
+          "example": "/users/profilePhotos/id:3128758325.jpg"
+        }
+      },
+      "required": [
+        "nomeEmpresarial",
+        "nomeFantasia",
+        "firstName",
+        "lastName",
+        "document",
+        "email",
         "phoneNumber",
         "password"
       ]
