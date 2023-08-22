@@ -8,12 +8,12 @@ class UserAuth {
 			const tokenCheckResult = await this.checkToken(req.body);
 
 			if (tokenCheckResult) {
-				return res.sendStatus(200);
+				return res.status(200).send({ message: 'Authorized' });
 			} else {
-				return res.sendStatus(401);
+				return res.status(401).send({ message: 'Please send the right token' });
 			}
 		} catch (error) {
-			res.sendStatus(400).json({ error: error.message });
+			res.status(400).json({ error: error.message });
 		}
 		// add - jwt
 	};
@@ -37,7 +37,8 @@ class UserAuth {
 
 			return true;
 		} catch (error) {
-			return false;
+			// return false;
+			throw new Error(error.message);
 		}
 	};
 
