@@ -2,6 +2,8 @@ import Entity from '../models/User.js';
 import ValidationError from '../util/customErrors/ValidationError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
 import speakeasy from 'speakeasy';
+import jwtLib from 'jsonwebtoken';
+import env from '../config/env.json' assert { type: 'json' };
 
 class UserController {
 	static getAllEntities = async (req, res) => {
@@ -14,24 +16,35 @@ class UserController {
 	};
 
 	static getEntityById = async (req, res) => {
+		const jwt = req.header('Authorization');
+
+		if (!jwt) {
+			return res.status(400).json({ message: 'Missing jwt authentication' });
+		}
+
 		try {
+			jwtLib.verify(jwtToken, env.jwtSecretKey); // throws a JsonWebTokenError if it is not valid
+
 			const entity = await Entity.findByPk(req.params.id);
 			if (entity) {
-				res.status(200).json(entity);
+				return res.status(200).json(entity);
 			} else {
-				res.status(400).send({
+				return res.status(400).send({
 					message: `Id ${req.params.id} not found!`
 				});
 			}
 		} catch (error) {
-			res.status(500).send({ message: `${error.message}` });
+			if (error.name == 'JsonWebTokenError') {
+				return res.status(401).send({ unauthorized: `${error.message}` });
+			}
+			return res.status(500).send({ message: `${error.message}` });
 		}
 	};
 
 	static createEntity = async (req, res) => {
 		try {
 			const temp_secret = speakeasy.generateSecret();
-			const createdEntity =  await Entity.create({
+			const createdEntity = await Entity.create({
 				firstName: req.body.firstName,
 				lastName: req.body.lastName,
 				cpf: req.body.cpf,
@@ -43,7 +56,7 @@ class UserController {
 				profilePhoto: req.body.profilePhoto
 			});
 			res.status(201).send({
-				userId : createdEntity.id,
+				userId: createdEntity.id,
 				qrCodeUrl: `${temp_secret.otpauth_url}`
 			});
 		} catch (error) {
