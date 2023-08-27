@@ -6,6 +6,21 @@ import jwtLib from 'jsonwebtoken';
 import env from '../config/env.json' assert { type: 'json' };
 
 class UserController {
+	static exemple = () => {
+		const jwt = req.header('Authorization');
+
+		if (!jwt) {
+			return res.status(400).json({ message: 'Missing jwt authentication' });
+		}
+		try {
+			jwtLib.verify(jwtToken, env.jwtSecretKey); // throws a JsonWebTokenError if it is not valid
+		} catch (error) {
+			if (error.name == 'JsonWebTokenError') {
+				return res.status(401).send({ unauthorized: `${error.message}` });
+			}
+		}
+	};
+
 	static getAllEntities = async (req, res) => {
 		try {
 			const users = await Entity.findAll();
