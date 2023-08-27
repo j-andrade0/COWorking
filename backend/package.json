@@ -22,7 +22,8 @@
 		"nodemon": "^2.0.15"
 	},
 	"dependencies": {
-		"express": "^4.17.3",
+		"express": "^4.18.2",
+		"jsonwebtoken": "^9.0.1",
 		"mysql2": "^3.3.2",
 		"sequelize": "^6.31.1",
 		"speakeasy": "^2.0.0",
