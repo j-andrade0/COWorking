@@ -1,35 +1,38 @@
 import Entity from '../../models/User.js';
 import NoEntityError from '../../util/customErrors/NoEntityError.js';
 import speakeasy from 'speakeasy';
+import jwt from 'jsonwebtoken';
+import env from '../../config/env.json' assert { type: 'json' };
+
 
 class UserAuth {
 	static login = async (req, res) => {
+		const userId = req.body.userId;
+		const totpToken = req.body.token;
 		try {
-			const tokenCheckResult = await this.checkToken(req.body);
+			const tokenCheckResult = await this.checkToken(userId, totpToken);
 
 			if (tokenCheckResult) {
-				return res.status(200).send({ message: 'Authorized' });
+				const jwtToken = jwt.sign({ id: userId }, env.jwtSecretKey, { expiresIn: '1h' });
+				return res.status(200).json({ jwtToken });
 			} else {
 				return res.status(401).send({ message: 'Please send the right token' });
 			}
 		} catch (error) {
 			res.status(400).json({ error: error.message });
 		}
-		// add - jwt
 	};
 
-	static checkToken = async (body) => {
+	static checkToken = async (userId, totpToken) => {
 		try {
-			const userId = body.userId;
-			const token = body.token;
 			const entity = await Entity.findByPk(userId);
 
 			if (!entity) {
 				throw new NoEntityError('Entity not found');
 			}
 
-			const isVerifiedToken = await this.verifyToken(entity, token);
-			const isValidToken = this.validateToken(entity, token);
+			const isVerifiedToken = await this.verifyToken(entity, totpToken);
+			const isValidToken = this.validateToken(entity, totpToken);
 
 			if (!isVerifiedToken || !isValidToken) {
 				return false;
