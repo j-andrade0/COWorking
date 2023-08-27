@@ -4,7 +4,6 @@ import speakeasy from 'speakeasy';
 import jwt from 'jsonwebtoken';
 import env from '../../config/env.json' assert { type: 'json' };
 
-
 class UserAuth {
 	static login = async (req, res) => {
 		const userId = req.body.userId;
