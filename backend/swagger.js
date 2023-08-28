@@ -24,48 +24,7 @@ const doc = {
 			name: 'Owner',
 			description: "Owner's endpoint"
 		}
-	],
-	definitions: {
-		User: {
-			id: '0293498asdfh384734ghfhk',
-			firstName: 'José',
-			lastName: 'Silva',
-			cpf: '000.000.000-00',
-			email: 'silvajose@gmail.com',
-			birthDate: '02/12/1978',
-			phoneNumber: '(99)99999-9999',
-			password: '1237csdf439',
-			profilePhoto:
-				'/users/profilePhotos/id:3128758325.jpg',
-			balanceAccount: 0.00
-			// Adicionar cidade na documentacao
-		},
-		CreateUser: {
-			$firstName: 'José',
-			$lastName: 'Silva',
-			$cpf: '000.000.000-00',
-			$email: 'silvajose@gmail.com',
-			$birthDate: '02/12/1978',
-			$phoneNumber: '(99)99999-9999',
-			$password: '234rhkwdhfk89',
-			profilePhoto:
-				'/users/profilePhotos/id:3128758325.jpg'
-			// Adicionar cidade na documentacao
-		},
-		CreateOwner: {
-			$nomeEmpresarial: "Marcio Souza EIRELI",
-			$nomeFantasia: "Marcio Embalagens",
-			$firstName: '',
-			$lastName: '',
-			$document: '000.000.000-00',
-			$email: 'silvajose@gmail.com',
-			$phoneNumber: '(99)99999-9999',
-			$password: '234rhkwdhfk89',
-			profilePhoto:
-				'/users/profilePhotos/id:3128758325.jpg'
-			// Adicionar cidade na documentacao
-		}
-	}
+	]
 };
 
 swaggerAutogen(outputFile, endpointsFile, doc);
