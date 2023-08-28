@@ -1,6 +1,9 @@
 import Entity from '../models/User.js';
 import ValidationError from '../util/customErrors/ValidationError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
+import speakeasy from 'speakeasy';
+import jwtLib from 'jsonwebtoken';
+import env from '../config/env.json' assert { type: 'json' };
 
 class UserController {
 	static getAllEntities = async (req, res) => {
@@ -13,24 +16,49 @@ class UserController {
 	};
 
 	static getEntityById = async (req, res) => {
+		const jwt = req.header('Authorization');
+
+		if (!jwt) {
+			return res.status(400).json({ message: 'Missing jwt authentication' });
+		}
+
 		try {
+			jwtLib.verify(jwt, env.jwtSecretKey); // throws a JsonWebTokenError if it is not valid
+
 			const entity = await Entity.findByPk(req.params.id);
 			if (entity) {
-				res.status(200).json(entity);
+				return res.status(200).json(entity);
 			} else {
-				res.status(400).send({
+				return res.status(400).send({
 					message: `Id ${req.params.id} not found!`
 				});
 			}
 		} catch (error) {
-			res.status(500).send({ message: `${error.message}` });
+			if (error.name == 'JsonWebTokenError' || error.name == 'TokenExpiredError') {
+				return res.status(401).send({ unauthorized: `${error.message}` });
+			}
+			return res.status(500).send({ message: `${error}` });
 		}
 	};
 
 	static createEntity = async (req, res) => {
 		try {
-			await Entity.create(req.body);
-			res.status(201).send({ message: 'Entity created!' });
+			const temp_secret = speakeasy.generateSecret();
+			const createdEntity = await Entity.create({
+				firstName: req.body.firstName,
+				lastName: req.body.lastName,
+				cpf: req.body.cpf,
+				email: req.body.email,
+				secret: temp_secret.base32,
+				isTempSecret: true,
+				// birthDate: req.body.birthDate, //problems with formatting
+				phoneNumber: req.body.phoneNumber,
+				profilePhoto: req.body.profilePhoto
+			});
+			res.status(201).send({
+				userId: createdEntity.id,
+				qrCodeUrl: `${temp_secret.otpauth_url}`
+			});
 		} catch (error) {
 			if (error.name == 'SequelizeUniqueConstraintError') {
 				res.status(400).send({ message: 'Values already registered' });
@@ -41,7 +69,15 @@ class UserController {
 	};
 
 	static updateFullEntity = async (req, res) => {
+		const jwt = req.header('Authorization');
+
+		if (!jwt) {
+			return res.status(400).json({ message: 'Missing jwt authentication' });
+		}
+
 		try {
+			jwtLib.verify(jwt, env.jwtSecretKey); // throws a JsonWebTokenError if it is not valid
+
 			const entity = await Entity.findByPk(req.params.id);
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
@@ -52,6 +88,9 @@ class UserController {
 			await entity.update(req.body);
 			res.status(200).json(entity);
 		} catch (error) {
+			if (error.name == 'JsonWebTokenError' || error.name == 'TokenExpiredError') {
+				return res.status(401).send({ unauthorized: `${error.message}` });
+			}
 			if (error instanceof ValidationError) {
 				res.status(400).send({ error: `${error}` });
 			} else if (error instanceof NoEntityError) {
@@ -65,21 +104,35 @@ class UserController {
 	};
 
 	static updateEntityName = async (req, res) => {
+		const jwt = req.header('Authorization');
+
+		if (!jwt) {
+			return res.status(400).json({ message: 'Missing jwt authentication' });
+		}
+
 		try {
+			jwtLib.verify(jwt, env.jwtSecretKey); // throws a JsonWebTokenError if it is not valid
+
 			const entity = await Entity.findByPk(req.params.id);
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
 			}
+
 			if (!req.body.firstName || !req.body.lastName) {
 				throw new ValidationError('No name provided!');
 			}
+
 			entity.set({
 				firstName: req.body.firstName,
 				lastName: req.body.lastName
 			});
+
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
+			if (error.name == 'JsonWebTokenError' || error.name == 'TokenExpiredError') {
+				return res.status(401).send({ unauthorized: `${error.message}` });
+			}
 			if (error instanceof ValidationError) {
 				res.status(400).send({ error: `${error}` });
 			} else if (error instanceof NoEntityError) {
@@ -91,20 +144,34 @@ class UserController {
 	};
 
 	static updateEntityProfilePhoto = async (req, res) => {
+		const jwt = req.header('Authorization');
+
+		if (!jwt) {
+			return res.status(400).json({ message: 'Missing jwt authentication' });
+		}
+
 		try {
+			jwtLib.verify(jwt, env.jwtSecretKey); // throws a JsonWebTokenError if it is not valid
+
 			const entity = await Entity.findByPk(req.params.id);
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
 			}
+
 			if (!req.body.profilePhoto) {
 				throw new ValidationError('No path to profile photo provided!');
 			}
+
 			entity.set({
 				profilePhoto: req.body.profilePhoto
 			});
+
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
+			if (error.name == 'JsonWebTokenError' || error.name == 'TokenExpiredError') {
+				return res.status(401).send({ unauthorized: `${error.message}` });
+			}
 			if (error instanceof ValidationError) {
 				res.status(400).send({ error: `${error}` });
 			} else if (error instanceof NoEntityError) {
@@ -143,7 +210,15 @@ class UserController {
 	};
 
 	static updateEntityEmail = async (req, res) => {
+		const jwt = req.header('Authorization');
+
+		if (!jwt) {
+			return res.status(400).json({ message: 'Missing jwt authentication' });
+		}
+
 		try {
+			jwtLib.verify(jwt, env.jwtSecretKey); // throws a JsonWebTokenError if it is not valid
+
 			const entity = await Entity.findByPk(req.params.id);
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
@@ -157,6 +232,9 @@ class UserController {
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
+			if (error.name == 'JsonWebTokenError' || error.name == 'TokenExpiredError') {
+				return res.status(401).send({ unauthorized: `${error.message}` });
+			}
 			if (error instanceof ValidationError) {
 				res.status(400).send({ error: `${error}` });
 			} else if (error instanceof NoEntityError) {
