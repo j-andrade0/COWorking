@@ -30,10 +30,6 @@ router.patch('/users/name/:id', UserController.updateEntityName, () => {
 	/* #swagger.tags = ['User']*/
 });
 
-router.patch('/users/password/:id', UserController.updateEntityPassword, () => {
-	/* #swagger.tags = ['User']*/
-});
-
 router.patch('/users/profilePhoto/:id', UserController.updateEntityProfilePhoto, () => {
 	/* #swagger.tags = ['User']*/
 });

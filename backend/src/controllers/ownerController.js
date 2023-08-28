@@ -1,5 +1,3 @@
-import { InstanceError } from 'sequelize';
-import Owner from '../models/Owner.js';
 import Entity from '../models/Owner.js';
 import ValidationError from '../util/customErrors/ValidationError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
@@ -120,31 +118,6 @@ class OwnerController {
 				res.status(400).send({ error: `${error}` });
 			} else if (error.name == 'SequelizeUniqueConstraintError') {
 				res.status(400).send({ message: 'Values already registered' });
-			} else {
-				res.status(500).send({ error: `${error}` });
-			}
-		}
-	};
-
-	static updateEntityPassword = async (req, res) => {
-		try {
-			const entity = await Entity.findByPk(req.params.id);
-			if (!entity) {
-				throw new NoEntityError('No entity was found by this id!');
-			}
-			if (!req.body.password) {
-				throw new ValidationError('No password provided!');
-			}
-			entity.set({
-				password: req.body.password
-			});
-			await entity.save();
-			res.status(200).json(entity);
-		} catch (error) {
-			if (error instanceof ValidationError) {
-				res.status(400).send({ error: `${error}` });
-			} else if (error instanceof NoEntityError) {
-				res.status(400).send({ error: `${error}` });
 			} else {
 				res.status(500).send({ error: `${error}` });
 			}
