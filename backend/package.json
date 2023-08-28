@@ -6,7 +6,7 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"dev": "nodemon server.js",
-		"start": "node swagger.js\nnode server.js"
+		"start": "./run.sh"
 	},
 	"prettier": {
 		"tabWidth": 4,

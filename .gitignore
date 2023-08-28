@@ -103,6 +103,9 @@ dist
 # TernJS port file
 .tern-port
 
-env.json
 .DS_Store
+
 /backend/swagger_output.json
+
+# file to start the server
+run.sh 

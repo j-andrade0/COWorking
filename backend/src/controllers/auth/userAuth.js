@@ -2,7 +2,6 @@ import Entity from '../../models/User.js';
 import NoEntityError from '../../util/customErrors/NoEntityError.js';
 import speakeasy from 'speakeasy';
 import jwt from 'jsonwebtoken';
-import env from '../../config/env.json' assert { type: 'json' };
 
 class UserAuth {
 	static login = async (req, res) => {
@@ -12,7 +11,7 @@ class UserAuth {
 			const tokenCheckResult = await this.checkToken(userId, totpToken);
 
 			if (tokenCheckResult) {
-				const jwtToken = jwt.sign({ id: userId }, env.jwtSecretKey, { expiresIn: '1h' });
+				const jwtToken = jwt.sign({ id: userId }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
 				return res.status(200).json({ jwtToken });
 			} else {
 				return res.status(401).send({ message: 'Please send the right token' });
