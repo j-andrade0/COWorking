@@ -38,10 +38,6 @@ const Owner = db.define('Owner', {
 		allowNull: false,
 		unique: true
 	},
-	password: {
-		type: DataTypes.STRING,
-		allowNull: false
-	},
 	profilePhoto: {
 		type: DataTypes.STRING,
 		allowNull: true,

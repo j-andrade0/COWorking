@@ -1,6 +1,5 @@
 import express from 'express';
 import db from './config/dbConnect.js';
-import User from './models/User.js';
 import routes from './routes/index.js';
 
 try {
