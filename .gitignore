@@ -105,3 +105,4 @@ dist
 
 env.json
 .DS_Store
+/backend/swagger_output.json
