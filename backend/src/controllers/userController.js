@@ -3,7 +3,6 @@ import ValidationError from '../util/customErrors/ValidationError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
 import speakeasy from 'speakeasy';
 import jwtLib from 'jsonwebtoken';
-import env from '../config/env.json' assert { type: 'json' };
 
 class UserController {
 	static getAllEntities = async (req, res) => {
@@ -23,7 +22,7 @@ class UserController {
 		}
 
 		try {
-			jwtLib.verify(jwt, env.jwtSecretKey); // throws a JsonWebTokenError if it is not valid
+			jwtLib.verify(jwt, process.env.JWT_SECRET_KEY); // throws a JsonWebTokenError if it is not valid
 
 			const entity = await Entity.findByPk(req.params.id);
 			if (entity) {
@@ -76,7 +75,7 @@ class UserController {
 		}
 
 		try {
-			jwtLib.verify(jwt, env.jwtSecretKey); // throws a JsonWebTokenError if it is not valid
+			jwtLib.verify(jwt, process.env.JWT_SECRET_KEY); // throws a JsonWebTokenError if it is not valid
 
 			const entity = await Entity.findByPk(req.params.id);
 			if (!entity) {
@@ -111,7 +110,7 @@ class UserController {
 		}
 
 		try {
-			jwtLib.verify(jwt, env.jwtSecretKey); // throws a JsonWebTokenError if it is not valid
+			jwtLib.verify(jwt, process.env.JWT_SECRET_KEY); // throws a JsonWebTokenError if it is not valid
 
 			const entity = await Entity.findByPk(req.params.id);
 			if (!entity) {
@@ -151,7 +150,7 @@ class UserController {
 		}
 
 		try {
-			jwtLib.verify(jwt, env.jwtSecretKey); // throws a JsonWebTokenError if it is not valid
+			jwtLib.verify(jwt, process.env.JWT_SECRET_KEY); // throws a JsonWebTokenError if it is not valid
 
 			const entity = await Entity.findByPk(req.params.id);
 			if (!entity) {
@@ -217,7 +216,7 @@ class UserController {
 		}
 
 		try {
-			jwtLib.verify(jwt, env.jwtSecretKey); // throws a JsonWebTokenError if it is not valid
+			jwtLib.verify(jwt, process.env.JWT_SECRET_KEY); // throws a JsonWebTokenError if it is not valid
 
 			const entity = await Entity.findByPk(req.params.id);
 			if (!entity) {
