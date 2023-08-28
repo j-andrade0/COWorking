@@ -20,6 +20,12 @@ router.get('/users/:id', UserController.getEntityById, () => {
 	/* #swagger.responses[400] */
 });
 
+router.get('/users/validateUser', UserController.getEntityByEmail, () => {
+	/* #swagger.tags = ['User']*/
+	/* #swagger.responses[200] */
+	/* #swagger.responses[400] */
+});
+
 router.post('/users', UserController.createEntity, () => {
 	/* #swagger.tags = ['User']*/
 	/* #swagger.parameters['newUser'] = {

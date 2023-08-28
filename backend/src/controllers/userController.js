@@ -40,6 +40,21 @@ class UserController {
 		}
 	};
 
+	static getEntityByEmail = async (req, res) => {
+		try {
+			const entity = await Entity.findOne({ where: { email: req.body.email} });
+			if (entity) {
+				res.status(200).json(entity);
+			} else {
+				res.status(400).send({
+					message: `Email ${req.body.email} not found!`
+				});
+			}
+		} catch (error) {
+			res.status(500).send({ message: `${error.message}` });
+		}
+	};
+
 	static createEntity = async (req, res) => {
 		try {
 			const temp_secret = speakeasy.generateSecret();
