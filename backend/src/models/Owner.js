@@ -33,6 +33,15 @@ const Owner = db.define('Owner', {
 		allowNull: false,
 		unique: true
 	},
+	secret: {
+		type: DataTypes.STRING,
+		allowNull: false,
+		unique: true
+	},
+	isTempSecret: {
+		type: DataTypes.BOOLEAN,
+		allowNull: false
+	},
 	phoneNumber: {
 		type: DataTypes.STRING,
 		allowNull: false,
