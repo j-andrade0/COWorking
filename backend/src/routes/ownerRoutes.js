@@ -1,5 +1,6 @@
 import express from 'express';
 import OwnerController from '../controllers/ownerController.js';
+import OwnerAuth from '../controllers/auth/ownerAuth.js';
 
 const router = express.Router();
 
@@ -16,7 +17,7 @@ router.post('/owners', OwnerController.createEntity, () => {
 });
 
 // router.put('/owners/:id', OwnerController.updateFullEntity, () => { // must be acessed just by admins
-	/* #swagger.tags = ['Owner']*/
+/* #swagger.tags = ['Owner']*/
 // });
 
 router.patch('/owners/name/:id', OwnerController.updateEntityName, () => {
@@ -29,6 +30,10 @@ router.patch('/owners/profilePhoto/:id', OwnerController.updateEntityProfilePhot
 
 router.patch('/owners/email/:id', OwnerController.updateEntityEmail, () => {
 	/* #swagger.tags = ['Owner']*/
+});
+
+router.post('/ownerLogin', OwnerAuth.login, () => {
+	/* #swagger.tags = ['Owner'] */
 });
 
 export default router;
