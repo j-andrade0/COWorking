@@ -131,7 +131,7 @@ class SpaceController {
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
 			}
-			if (!req.body.address) {
+			if (!req.body.size) {
 				throw new ValidationError('No size provided!');
 			}
 
