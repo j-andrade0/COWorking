@@ -38,7 +38,7 @@ router.patch('/users/email/:id', UserController.updateEntityEmail, () => {
 	/* #swagger.tags = ['User']*/
 });
 
-router.patch('users/newSecret', UserAuth.newSecret, () => {
+router.post('/users/newSecret/:id', UserAuth.newSecret, () => {
 	/* #swagger.tags = ['User'] */
 });
 
