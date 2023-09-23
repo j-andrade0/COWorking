@@ -92,9 +92,26 @@ class UserAuth {
 		}
 	};
 
-	static newSecret = (req, res) => {
-		// A user creates a account, but close the app before validating it, in that case, the user don't have a token code in the authenticator app, and needs a new secret.
+	static newSecret = async (req, res) => {
+		// A user creates an account, but close the app before validating it, in that case, the user don't have a token code in the authenticator app, and needs a new secret.
 		// query in the db user table, if the column 'isTempSecret' is true, prove that the user never validate the token.
+		const userId = req.params.id;
+
+		const entity = await Entity.findByPk(userId);
+
+		if(entity.isTempSecret){
+			const newSecret = speakeasy.generateSecret();
+
+			entity.set({
+				secret: newSecret.base32,
+			});
+
+			await entity.save();
+
+			return res.status(201).send({
+				qrCodeUrl: `${newSecret.otpauth_url}`
+			});
+		} else return res.status(400).send({msg: 'This user has a permanent secret'})
 	};
 }
 export default UserAuth;
