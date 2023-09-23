@@ -100,7 +100,7 @@ class UserAuth {
 		const entity = await Entity.findByPk(userId);
 
 		if(entity.isTempSecret){
-			const newSecret = speakeasy.generateSecret('Coworking');
+			const newSecret = speakeasy.generateSecret();
 
 			entity.set({
 				secret: newSecret.base32,
