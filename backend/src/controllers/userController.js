@@ -15,15 +15,7 @@ class UserController {
 	};
 
 	static getEntityById = async (req, res) => {
-		const jwt = req.header('Authorization');
-
-		if (!jwt) {
-			return res.status(400).json({ message: 'Missing jwt authentication' });
-		}
-
 		try {
-			jwtLib.verify(jwt, process.env.JWT_SECRET_KEY); // throws a JsonWebTokenError if it is not valid
-
 			const entity = await Entity.findByPk(req.params.id);
 			if (entity) {
 				return res.status(200).json(entity);
@@ -33,9 +25,6 @@ class UserController {
 				});
 			}
 		} catch (error) {
-			if (error.name == 'JsonWebTokenError' || error.name == 'TokenExpiredError') {
-				return res.status(401).send({ unauthorized: `${error.message}` });
-			}
 			return res.status(500).send({ message: `${error}` });
 		}
 	};

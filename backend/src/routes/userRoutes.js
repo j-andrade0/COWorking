@@ -1,6 +1,7 @@
 import express from 'express';
 import UserController from '../controllers/userController.js';
 import UserAuth from '../controllers/auth/userAuth.js';
+import authorizationMiddleware from '../middlewares/authorizationMiddleware.js'
 
 const router = express.Router();
 
@@ -12,7 +13,7 @@ router.get('/users', UserController.getAllEntities, () => {
 	/* #swagger.responses[500]*/
 });
 
-router.get('/users/:id', UserController.getEntityById, () => {
+router.get('/users/:id', authorizationMiddleware, UserController.getEntityById, () => {
 	/* #swagger.tags = ['User']*/
 	/* #swagger.responses[200] = { 
 		schema: { $ref: "#/definitions/User" },
