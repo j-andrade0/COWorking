@@ -109,3 +109,5 @@ dist
 
 # file to start the server
 run.sh 
+
+.idea
