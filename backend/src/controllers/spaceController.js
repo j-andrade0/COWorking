@@ -1,40 +1,19 @@
 import Entity from '../models/Space.js';
 import ValidationError from '../util/customErrors/ValidationError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
-import jwtLib from 'jsonwebtoken';
 
 class SpaceController {
 	static getAllEntities = async (req, res) => {
-		const jwt = req.header('Authorization');
-
-		if (!jwt) {
-			return res.status(400).json({ message: 'Missing jwt authentication' });
-		}
-
 		try {
-			jwtLib.verify(jwt, process.env.JWT_SECRET_KEY); // throws a JsonWebTokenError if it is not valid
-
 			const entities = await Entity.findAll();
 			res.status(200).json(entities);
 		} catch (error) {
-			if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
-				return res.status(401).send({ unauthorized: `${error.message}` });
-			}
-
 			res.status(500).send({ message: `${error.message}` });
 		}
 	};
 
 	static getEntityById = async (req, res) => {
-		const jwt = req.header('Authorization');
-
-		if (!jwt) {
-			return res.status(400).json({ message: 'Missing jwt authentication' });
-		}
-
 		try {
-			jwtLib.verify(jwt, process.env.JWT_SECRET_KEY); // throws a JsonWebTokenError if it is not valid
-
 			const entity = await Entity.findByPk(req.params.id);
 			if (entity) {
 				res.status(200).json(entity);
@@ -44,23 +23,12 @@ class SpaceController {
 				});
 			}
 		} catch (error) {
-			if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
-				return res.status(401).send({ unauthorized: `${error.message}` });
-			}
 			res.status(500).send({ message: `${error.message}` });
 		}
 	};
 
 	static createEntity = async (req, res) => {
-		const jwt = req.header('Authorization');
-
-		if (!jwt) {
-			return res.status(400).json({ message: 'Missing jwt authentication' });
-		}
-
 		try {
-			jwtLib.verify(jwt, process.env.JWT_SECRET_KEY); // throws a JsonWebTokenError if it is not valid
-
 			const createdEntity = await Entity.create({
 				address: req.body.address,
 				rating: null,
@@ -69,9 +37,7 @@ class SpaceController {
 			});
 			res.status(201).json(createdEntity);
 		} catch (error) {
-			if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
-				return res.status(401).send({ unauthorized: `${error.message}` });
-			} else if (error.name === 'SequelizeUniqueConstraintError') {
+			if (error.name === 'SequelizeUniqueConstraintError') {
 				res.status(400).send({ message: 'Values already registered' });
 			} else {
 				res.status(500).send({ message: `${error.message}` });
@@ -80,15 +46,7 @@ class SpaceController {
 	};
 
 	static updateEntityAddress = async (req, res) => {
-		const jwt = req.header('Authorization');
-
-		if (!jwt) {
-			return res.status(400).json({ message: 'Missing jwt authentication' });
-		}
-
 		try {
-			jwtLib.verify(jwt, process.env.JWT_SECRET_KEY); // throws a JsonWebTokenError if it is not valid
-
 			const entity = await Entity.findByPk(req.params.id);
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
@@ -104,9 +62,6 @@ class SpaceController {
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
-			if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
-				return res.status(401).send({ unauthorized: `${error.message}` });
-			}
 			if (error instanceof ValidationError) {
 				res.status(400).send({ error: `${error}` });
 			} else if (error instanceof NoEntityError) {
@@ -118,15 +73,7 @@ class SpaceController {
 	};
 
 	static updateEntitySize = async (req, res) => {
-		const jwt = req.header('Authorization');
-
-		if (!jwt) {
-			return res.status(400).json({ message: 'Missing jwt authentication' });
-		}
-
 		try {
-			jwtLib.verify(jwt, process.env.JWT_SECRET_KEY); // throws a JsonWebTokenError if it is not valid
-
 			const entity = await Entity.findByPk(req.params.id);
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
@@ -142,9 +89,6 @@ class SpaceController {
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
-			if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
-				return res.status(401).send({ unauthorized: `${error.message}` });
-			}
 			if (error instanceof ValidationError) {
 				res.status(400).send({ error: `${error}` });
 			} else if (error instanceof NoEntityError) {
@@ -156,15 +100,7 @@ class SpaceController {
 	};
 
 	static updateEntityDescription = async (req, res) => {
-		const jwt = req.header('Authorization');
-
-		if (!jwt) {
-			return res.status(400).json({ message: 'Missing jwt authentication' });
-		}
-
 		try {
-			jwtLib.verify(jwt, process.env.JWT_SECRET_KEY); // throws a JsonWebTokenError if it is not valid
-
 			const entity = await Entity.findByPk(req.params.id);
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
@@ -180,9 +116,6 @@ class SpaceController {
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
-			if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
-				return res.status(401).send({ unauthorized: `${error.message}` });
-			}
 			if (error instanceof ValidationError) {
 				res.status(400).send({ error: `${error}` });
 			} else if (error instanceof NoEntityError) {
