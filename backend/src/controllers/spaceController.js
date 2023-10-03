@@ -33,7 +33,8 @@ class SpaceController {
 				address: req.body.address,
 				rating: null,
 				size: req.body.size,
-				description: req.body.description
+				description: req.body.description,
+				ownerId: req.body.ownerId
 			});
 			res.status(201).json(createdEntity);
 		} catch (error) {
