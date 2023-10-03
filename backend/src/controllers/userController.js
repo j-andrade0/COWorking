@@ -2,7 +2,6 @@ import Entity from '../models/User.js';
 import ValidationError from '../util/customErrors/ValidationError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
 import speakeasy from 'speakeasy';
-import jwtLib from 'jsonwebtoken';
 
 class UserController {
 	static getAllEntities = async (req, res) => {
@@ -57,15 +56,7 @@ class UserController {
 	};
 
 	static updateFullEntity = async (req, res) => {
-		const jwt = req.header('Authorization');
-
-		if (!jwt) {
-			return res.status(400).json({ message: 'Missing jwt authentication' });
-		}
-
 		try {
-			jwtLib.verify(jwt, process.env.JWT_SECRET_KEY); // throws a JsonWebTokenError if it is not valid
-
 			const entity = await Entity.findByPk(req.params.id);
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
@@ -76,9 +67,6 @@ class UserController {
 			await entity.update(req.body);
 			res.status(200).json(entity);
 		} catch (error) {
-			if (error.name == 'JsonWebTokenError' || error.name == 'TokenExpiredError') {
-				return res.status(401).send({ unauthorized: `${error.message}` });
-			}
 			if (error instanceof ValidationError) {
 				res.status(400).send({ error: `${error}` });
 			} else if (error instanceof NoEntityError) {
@@ -92,15 +80,7 @@ class UserController {
 	};
 
 	static updateEntityName = async (req, res) => {
-		const jwt = req.header('Authorization');
-
-		if (!jwt) {
-			return res.status(400).json({ message: 'Missing jwt authentication' });
-		}
-
 		try {
-			jwtLib.verify(jwt, process.env.JWT_SECRET_KEY); // throws a JsonWebTokenError if it is not valid
-
 			const entity = await Entity.findByPk(req.params.id);
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
@@ -118,9 +98,6 @@ class UserController {
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
-			if (error.name == 'JsonWebTokenError' || error.name == 'TokenExpiredError') {
-				return res.status(401).send({ unauthorized: `${error.message}` });
-			}
 			if (error instanceof ValidationError) {
 				res.status(400).send({ error: `${error}` });
 			} else if (error instanceof NoEntityError) {
@@ -132,15 +109,7 @@ class UserController {
 	};
 
 	static updateEntityProfilePhoto = async (req, res) => {
-		const jwt = req.header('Authorization');
-
-		if (!jwt) {
-			return res.status(400).json({ message: 'Missing jwt authentication' });
-		}
-
 		try {
-			jwtLib.verify(jwt, process.env.JWT_SECRET_KEY); // throws a JsonWebTokenError if it is not valid
-
 			const entity = await Entity.findByPk(req.params.id);
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
@@ -157,9 +126,6 @@ class UserController {
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
-			if (error.name == 'JsonWebTokenError' || error.name == 'TokenExpiredError') {
-				return res.status(401).send({ unauthorized: `${error.message}` });
-			}
 			if (error instanceof ValidationError) {
 				res.status(400).send({ error: `${error}` });
 			} else if (error instanceof NoEntityError) {
@@ -198,15 +164,7 @@ class UserController {
 	};
 
 	static updateEntityEmail = async (req, res) => {
-		const jwt = req.header('Authorization');
-
-		if (!jwt) {
-			return res.status(400).json({ message: 'Missing jwt authentication' });
-		}
-
 		try {
-			jwtLib.verify(jwt, process.env.JWT_SECRET_KEY); // throws a JsonWebTokenError if it is not valid
-
 			const entity = await Entity.findByPk(req.params.id);
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
@@ -220,9 +178,6 @@ class UserController {
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
-			if (error.name == 'JsonWebTokenError' || error.name == 'TokenExpiredError') {
-				return res.status(401).send({ unauthorized: `${error.message}` });
-			}
 			if (error instanceof ValidationError) {
 				res.status(400).send({ error: `${error}` });
 			} else if (error instanceof NoEntityError) {

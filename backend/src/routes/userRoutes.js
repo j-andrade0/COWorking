@@ -33,7 +33,7 @@ router.post('/users', UserController.createEntity, () => {
 	/* #swagger.responses[500] */
 });
 
-router.put('/users/:id', UserController.updateFullEntity, () => {
+router.put('/users/:id', authorizationMiddleware, UserController.updateFullEntity, () => {
 	/* #swagger.tags = ['User']*/
 	/* #swagger.parameters['id'] = {
 		"in": "path",
@@ -53,7 +53,7 @@ router.put('/users/:id', UserController.updateFullEntity, () => {
 	/* #swagger.responses[500] */
 });
 
-router.patch('/users/name/:id', UserController.updateEntityName, () => {
+router.patch('/users/name/:id', authorizationMiddleware, UserController.updateEntityName, () => {
 	/* #swagger.tags = ['User']*/
 });
 
@@ -61,11 +61,11 @@ router.patch('/users/password/:id', UserController.updateEntityPassword, () => {
 	/* #swagger.tags = ['User']*/
 });
 
-router.patch('/users/profilePhoto/:id', UserController.updateEntityProfilePhoto, () => {
+router.patch('/users/profilePhoto/:id', authorizationMiddleware, UserController.updateEntityProfilePhoto, () => {
 	/* #swagger.tags = ['User']*/
 });
 
-router.patch('/users/email/:id', UserController.updateEntityEmail, () => {
+router.patch('/users/email/:id', authorizationMiddleware, UserController.updateEntityEmail, () => {
 	/* #swagger.tags = ['User']*/
 });
 
@@ -77,7 +77,7 @@ router.post('/userLogin', UserAuth.login, () => {
 	/* #swagger.tags = ['User'] */
 });
 
-router.delete('/users/:id', UserController.deleteEntity, () => {
+router.delete('/users/:id', authorizationMiddleware, UserController.deleteEntity, () => {
 	/* #swagger.tags = ['User']*/
 	/* #swagger.responses[200] */
 	/* #swagger.responses[500] */
