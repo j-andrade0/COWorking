@@ -18,8 +18,6 @@ function verifyJwt(req, res, next) {
 			return res.status(401).send({ unauthorized: `${error.message}` });
 		}
 	}
-
-
 };
 
 export default verifyJwt;
