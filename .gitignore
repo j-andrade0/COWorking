@@ -104,6 +104,8 @@ dist
 .tern-port
 
 .DS_Store
+.idea
+.vscode
 
 /backend/swagger_output.json
 

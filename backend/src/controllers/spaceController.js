@@ -1,15 +1,26 @@
-import Entity from '../models/Owner.js';
+import Entity from '../models/Space.js';
 import ValidationError from '../util/customErrors/ValidationError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
-import speakeasy from 'speakeasy';
 import jwtLib from 'jsonwebtoken';
 
-class OwnerController {
+class SpaceController {
 	static getAllEntities = async (req, res) => {
+		const jwt = req.header('Authorization');
+
+		if (!jwt) {
+			return res.status(400).json({ message: 'Missing jwt authentication' });
+		}
+
 		try {
+			jwtLib.verify(jwt, process.env.JWT_SECRET_KEY); // throws a JsonWebTokenError if it is not valid
+
 			const entities = await Entity.findAll();
 			res.status(200).json(entities);
 		} catch (error) {
+			if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+				return res.status(401).send({ unauthorized: `${error.message}` });
+			}
+
 			res.status(500).send({ message: `${error.message}` });
 		}
 	};
@@ -33,7 +44,7 @@ class OwnerController {
 				});
 			}
 		} catch (error) {
-			if (error.name == 'JsonWebTokenError' || error.name == 'TokenExpiredError') {
+			if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
 				return res.status(401).send({ unauthorized: `${error.message}` });
 			}
 			res.status(500).send({ message: `${error.message}` });
@@ -41,26 +52,26 @@ class OwnerController {
 	};
 
 	static createEntity = async (req, res) => {
+		const jwt = req.header('Authorization');
+
+		if (!jwt) {
+			return res.status(400).json({ message: 'Missing jwt authentication' });
+		}
+
 		try {
-			const temp_secret = speakeasy.generateSecret();
+			jwtLib.verify(jwt, process.env.JWT_SECRET_KEY); // throws a JsonWebTokenError if it is not valid
+
 			const createdEntity = await Entity.create({
-				nomeEmpresarial: req.body.nomeEmpresarial,
-				nomeFantasia: req.body.nomeFantasia,
-				firstName: req.body.firstName,
-				lastName: req.body.lastName,
-				document: req.body.document,
-				email: req.body.email,
-				secret: temp_secret.base32,
-				isTempSecret: true,
-				phoneNumber: req.body.phoneNumber,
-				profilePhoto: req.body.profilePhoto
+				address: req.body.address,
+				rating: null,
+				size: req.body.size,
+				description: req.body.description
 			});
-			res.status(201).send({
-				userId: createdEntity.id,
-				qrCodeUrl: `${temp_secret.otpauth_url}`
-			});
+			res.status(201).json(createdEntity);
 		} catch (error) {
-			if (error.name == 'SequelizeUniqueConstraintError') {
+			if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+				return res.status(401).send({ unauthorized: `${error.message}` });
+			} else if (error.name === 'SequelizeUniqueConstraintError') {
 				res.status(400).send({ message: 'Values already registered' });
 			} else {
 				res.status(500).send({ message: `${error.message}` });
@@ -68,31 +79,7 @@ class OwnerController {
 		}
 	};
 
-	static updateFullEntity = async (req, res) => {
-		try {
-			const entity = await Entity.findByPk(req.params.id);
-			if (!entity) {
-				throw new NoEntityError('No entity was found by this id!');
-			}
-			if (!req.body) {
-				throw new ValidationError('No body provided!');
-			}
-			await entity.update(req.body);
-			res.status(200).json(entity);
-		} catch (error) {
-			if (error instanceof ValidationError) {
-				res.status(400).send({ error: `${error}` });
-			} else if (error instanceof NoEntityError) {
-				res.status(400).send({ error: `${error}` });
-			} else if (error.name == 'SequelizeUniqueConstraintError') {
-				res.status(400).send({ message: 'Values already registered' });
-			} else {
-				res.status(500).send({ error: `${error}` });
-			}
-		}
-	};
-
-	static updateEntityName = async (req, res) => {
+	static updateEntityAddress = async (req, res) => {
 		const jwt = req.header('Authorization');
 
 		if (!jwt) {
@@ -106,26 +93,18 @@ class OwnerController {
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
 			}
-			if (
-				!req.body.firstName ||
-				!req.body.lastName ||
-				!req.body.nomeEmpresarial ||
-				!req.body.nomeFantasia
-			) {
-				throw new ValidationError('No name provided!');
+			if (!req.body.address) {
+				throw new ValidationError('No address provided!');
 			}
 
 			entity.set({
-				firstName: req.body.firstName,
-				lastName: req.body.lastName,
-				nomeFantasia: req.body.nomeFantasia,
-				nomeEmpresarial: req.body.nomeEmpresarial
+				address: req.body.address
 			});
 
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
-			if (error.name == 'JsonWebTokenError' || error.name == 'TokenExpiredError') {
+			if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
 				return res.status(401).send({ unauthorized: `${error.message}` });
 			}
 			if (error instanceof ValidationError) {
@@ -138,7 +117,7 @@ class OwnerController {
 		}
 	};
 
-	static updateEntityProfilePhoto = async (req, res) => {
+	static updateEntitySize = async (req, res) => {
 		const jwt = req.header('Authorization');
 
 		if (!jwt) {
@@ -152,32 +131,31 @@ class OwnerController {
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
 			}
-			if (!req.body.profilePhoto) {
-				throw new ValidationError('No path to profile photo provided!');
+			if (!req.body.size) {
+				throw new ValidationError('No size provided!');
 			}
+
 			entity.set({
-				profilePhoto: req.body.profilePhoto
+				size: req.body.size
 			});
 
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
-			if (error.name == 'JsonWebTokenError' || error.name == 'TokenExpiredError') {
+			if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
 				return res.status(401).send({ unauthorized: `${error.message}` });
 			}
 			if (error instanceof ValidationError) {
 				res.status(400).send({ error: `${error}` });
 			} else if (error instanceof NoEntityError) {
 				res.status(400).send({ error: `${error}` });
-			} else if (error.name == 'SequelizeUniqueConstraintError') {
-				res.status(400).send({ message: 'Values already registered' });
 			} else {
 				res.status(500).send({ error: `${error}` });
 			}
 		}
 	};
 
-	static updateEntityEmail = async (req, res) => {
+	static updateEntityDescription = async (req, res) => {
 		const jwt = req.header('Authorization');
 
 		if (!jwt) {
@@ -191,25 +169,24 @@ class OwnerController {
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
 			}
-			if (!req.body.email) {
-				throw new ValidationError('No email provided!');
+			if (!req.body.description) {
+				throw new ValidationError('No description provided!');
 			}
+
 			entity.set({
-				email: req.body.email
+				description: req.body.description
 			});
 
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
-			if (error.name == 'JsonWebTokenError' || error.name == 'TokenExpiredError') {
+			if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
 				return res.status(401).send({ unauthorized: `${error.message}` });
 			}
 			if (error instanceof ValidationError) {
 				res.status(400).send({ error: `${error}` });
 			} else if (error instanceof NoEntityError) {
 				res.status(400).send({ error: `${error}` });
-			} else if (error.name == 'SequelizeUniqueConstraintError') {
-				res.status(400).send({ message: 'Values already registered' });
 			} else {
 				res.status(500).send({ error: `${error}` });
 			}
@@ -217,4 +194,4 @@ class OwnerController {
 	};
 }
 
-export default OwnerController;
+export default SpaceController;

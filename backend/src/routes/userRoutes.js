@@ -7,57 +7,27 @@ const router = express.Router();
 
 router.get('/users', UserController.getAllEntities, () => {
 	/* #swagger.tags = ['User']*/
-	/* #swagger.responses[200] = { 
-		schema: { $ref: "#/definitions/User" },
-	} */
-	/* #swagger.responses[500]*/
 });
 
 router.get('/users/:id', authorizationMiddleware, UserController.getEntityById, () => {
 	/* #swagger.tags = ['User']*/
-	/* #swagger.responses[200] = { 
-		schema: { $ref: "#/definitions/User" },
-	} */
-	/* #swagger.responses[400] */
 });
 
-router.post('/users', UserController.createEntity, () => {
+router.get('/users/validateUser', UserController.getEntityByEmail, () => {
 	/* #swagger.tags = ['User']*/
-	/* #swagger.parameters['newUser'] = {
-		in: 'body',
-		description: 'Informações do usuário.',
-		required: true,
-		schema: { $ref: "#/definitions/CreateUser" }
-	} */
 	/* #swagger.responses[201] */
 	/* #swagger.responses[500] */
 });
 
-router.put('/users/:id', authorizationMiddleware, UserController.updateFullEntity, () => {
+router.post('/users', UserController.createEntity, () => {
 	/* #swagger.tags = ['User']*/
-	/* #swagger.parameters['id'] = {
-		"in": "path",
-		"required": true,
-		"type": "string"
-	  }
-	  */
-	/* #swagger.parameters['newUser'] = {
-		in: 'body',
-		description: 'Update Users information.',
-		required: true,
-		schema: { $ref: "#/definitions/UpdateUser" }
-	} 
-	*/
-	/* #swagger.responses[200] */
-	/*#swagger.responses[400]*/
-	/* #swagger.responses[500] */
 });
+
+// router.put('/users/:id', authorizationMiddleware, UserController.updateFullEntity, () => { // must be acesses just by admins
+/* #swagger.tags = ['User']*/
+// });
 
 router.patch('/users/name/:id', authorizationMiddleware, UserController.updateEntityName, () => {
-	/* #swagger.tags = ['User']*/
-});
-
-router.patch('/users/password/:id', UserController.updateEntityPassword, () => {
 	/* #swagger.tags = ['User']*/
 });
 
@@ -69,18 +39,19 @@ router.patch('/users/email/:id', authorizationMiddleware, UserController.updateE
 	/* #swagger.tags = ['User']*/
 });
 
-router.patch('users/newSecret', UserAuth.newSecret, ()=>{
-	/* */
+router.post('/users/newSecret/:id', UserAuth.newSecret, () => {
+	/* #swagger.tags = ['User'] */
 });
 
 router.post('/userLogin', UserAuth.login, () => {
 	/* #swagger.tags = ['User'] */
 });
 
-router.delete('/users/:id', authorizationMiddleware, UserController.deleteEntity, () => {
-	/* #swagger.tags = ['User']*/
-	/* #swagger.responses[200] */
-	/* #swagger.responses[500] */
-});
+
+// router.delete('/users/:id', UserController.deleteEntity, () => {
+/* #swagger.tags = ['User']*/
+/* #swagger.responses[200] */
+/* #swagger.responses[500] */
+// });
 
 export default router;

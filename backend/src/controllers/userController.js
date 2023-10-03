@@ -28,6 +28,21 @@ class UserController {
 		}
 	};
 
+	static getEntityByEmail = async (req, res) => {
+		try {
+			const entity = await Entity.findOne({ where: { email: req.body.email } });
+			if (entity) {
+				res.status(200).json(entity);
+			} else {
+				res.status(400).send({
+					message: `Email ${req.body.email} not found!`
+				});
+			}
+		} catch (error) {
+			res.status(500).send({ message: `${error.message}` });
+		}
+	};
+
 	static createEntity = async (req, res) => {
 		try {
 			const temp_secret = speakeasy.generateSecret();
@@ -132,31 +147,6 @@ class UserController {
 				res.status(400).send({ error: `${error}` });
 			} else if (error.name == 'SequelizeUniqueConstraintError') {
 				res.status(400).send({ message: 'Values already registered' });
-			} else {
-				res.status(500).send({ error: `${error}` });
-			}
-		}
-	};
-
-	static updateEntityPassword = async (req, res) => {
-		try {
-			const entity = await Entity.findByPk(req.params.id);
-			if (!entity) {
-				throw new NoEntityError('No entity was found by this id!');
-			}
-			if (!req.body.password) {
-				throw new ValidationError('No password provided!');
-			}
-			entity.set({
-				password: req.body.password
-			});
-			await entity.save();
-			res.status(200).json(entity);
-		} catch (error) {
-			if (error instanceof ValidationError) {
-				res.status(400).send({ error: `${error}` });
-			} else if (error instanceof NoEntityError) {
-				res.status(400).send({ error: `${error}` });
 			} else {
 				res.status(500).send({ error: `${error}` });
 			}

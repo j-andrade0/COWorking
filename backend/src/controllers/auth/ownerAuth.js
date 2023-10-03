@@ -1,17 +1,17 @@
-import Entity from '../../models/User.js';
+import Entity from '../../models/Owner.js';
 import NoEntityError from '../../util/customErrors/NoEntityError.js';
 import speakeasy from 'speakeasy';
 import jwt from 'jsonwebtoken';
 
-class UserAuth {
+class OwnerAuth {
 	static login = async (req, res) => {
-		const userId = req.body.userId;
+		const ownerId = req.body.ownerId;
 		const totpToken = req.body.token;
 		try {
-			const tokenCheckResult = await this.checkToken(userId, totpToken);
+			const tokenCheckResult = await this.checkToken(ownerId, totpToken);
 
 			if (tokenCheckResult) {
-				const jwtToken = jwt.sign({ id: userId }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+				const jwtToken = jwt.sign({ id: ownerId }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
 				return res.status(200).json({ jwtToken });
 			} else {
 				return res.status(401).send({ message: 'Please send the right token' });
@@ -21,9 +21,9 @@ class UserAuth {
 		}
 	};
 
-	static checkToken = async (userId, totpToken) => {
+	static checkToken = async (ownerId, totpToken) => {
 		try {
-			const entity = await Entity.findByPk(userId);
+			const entity = await Entity.findByPk(ownerId);
 
 			if (!entity) {
 				throw new NoEntityError('Entity not found');
@@ -92,26 +92,9 @@ class UserAuth {
 		}
 	};
 
-	static newSecret = async (req, res) => {
-		// A user creates an account, but close the app before validating it, in that case, the user don't have a token code in the authenticator app, and needs a new secret.
+	static newSecret = (req, res) => {
+		// A user creates a account, but close the app before validating it, in that case, the user don't have a token code in the authenticator app, and needs a new secret.
 		// query in the db user table, if the column 'isTempSecret' is true, prove that the user never validate the token.
-		const userId = req.params.id;
-
-		const entity = await Entity.findByPk(userId);
-
-		if(entity.isTempSecret){
-			const newSecret = speakeasy.generateSecret();
-
-			entity.set({
-				secret: newSecret.base32,
-			});
-
-			await entity.save();
-
-			return res.status(201).send({
-				qrCodeUrl: `${newSecret.otpauth_url}`
-			});
-		} else return res.status(400).send({msg: 'This user has a permanent secret'})
 	};
 }
-export default UserAuth;
+export default OwnerAuth;
