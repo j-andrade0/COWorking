@@ -28,4 +28,8 @@ router.patch('/spaces/description/:id', authorizationMiddleware, SpaceController
 	/* #swagger.tags = ['Space']*/
 });
 
+router.delete('/spaces/:id', authorizationMiddleware, SpaceController.deleteEntity, () => {
+	/* #swagger.tags = ['Space']*/
+});
+
 export default router;

@@ -33,7 +33,8 @@ const Space = db.define(
 );
 
 Owner.hasMany(Space, {
-	foreignKey: 'ownerId'
+	foreignKey: 'ownerId',
+	onDelete: 'cascade'
 })
 
 export default Space;
