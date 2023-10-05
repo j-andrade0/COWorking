@@ -2,7 +2,6 @@ import Entity from '../models/Owner.js';
 import ValidationError from '../util/customErrors/ValidationError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
 import speakeasy from 'speakeasy';
-import jwtLib from 'jsonwebtoken';
 
 class OwnerController {
 	static getAllEntities = async (req, res) => {
@@ -169,6 +168,22 @@ class OwnerController {
 			} else {
 				res.status(500).send({ error: `${error}` });
 			}
+		}
+	};
+
+	static deleteEntity = async (req, res) => {
+		try {
+			const entity = await Entity.findByPk(req.params.id);
+			if (entity) {
+				await entity.destroy();
+				return res.status(204).send();
+			} else {
+				return res.status(400).send({
+					message: `Id ${req.params.id} not found!`
+				});
+			}
+		} catch (error) {
+			return res.status(500).send({ message: `${error}` });
 		}
 	};
 }

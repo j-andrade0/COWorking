@@ -48,10 +48,11 @@ router.post('/userLogin', UserAuth.login, () => {
 });
 
 
-// router.delete('/users/:id', UserController.deleteEntity, () => {
+router.delete('/users/:id', UserController.deleteEntity, () => {
 /* #swagger.tags = ['User']*/
-/* #swagger.responses[200] */
+/* #swagger.responses[204] *
+/* #swagger.responses[400] */
 /* #swagger.responses[500] */
-// });
+});
 
 export default router;

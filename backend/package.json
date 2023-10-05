@@ -16,7 +16,7 @@
 		"arrowParens": "always",
 		"requirePragma": false,
 		"trailingComma": "none",
-		"printWidth": 100
+		"printWidth": 120
 	},
 	"devDependencies": {
 		"nodemon": "^2.0.15"

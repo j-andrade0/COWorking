@@ -180,8 +180,20 @@ class UserController {
 		}
 	};
 
-	static deleteEntity = (req, res) => {
-		// aply soft delete
+	static deleteEntity = async (req, res) => {
+		try {
+			const entity = await Entity.findByPk(req.params.id);
+			if (entity) {
+				await entity.destroy();
+				return res.status(204).send();
+			} else {
+				return res.status(400).send({
+					message: `Id ${req.params.id} not found!`
+				});
+			}
+		} catch (error) {
+			return res.status(500).send({ message: `${error}` });
+		}
 	};
 }
 
