@@ -1,7 +1,7 @@
 import swaggerAutogen from 'swagger-autogen';
 
 const outputFile = './swagger_output.json';
-const endpointsFile = ['./src/routes/userRoutes.js', './src/routes/ownerRoutes.js', './src/routes/spaceRoutes.js'];
+const endpointsFile = ['./src/routes/userRoutes.js', './src/routes/ownerRoutes.js', './src/routes/spaceRoutes.js', './src/routes/blockRoutes.js', './src/routes/blockCategoryRoutes.js'];
 
 
 const doc = {
@@ -15,20 +15,6 @@ const doc = {
 	basePath: '/',
 	consumes: ['application/json'],
 	produces: ['application/json'],
-	tags: [
-		{
-			name: 'User',
-			description: "User's endpoint"
-		},
-		{
-			name: 'Owner',
-			description: "Owner's endpoint"
-		},
-		{
-			name: 'Space',
-			description: "Space's endpoint"
-		}
-	]
 };
 
 swaggerAutogen(outputFile, endpointsFile, doc);
