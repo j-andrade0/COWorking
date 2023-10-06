@@ -15,16 +15,16 @@ class BlockController {
 	static getEntityById = async (req, res) => {
 		try {
 			const entity = await Entity.findByPk(req.params.id);
-            if (!entity) {
+			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
-            }
-            res.status(200).json(entity);
+			}
+			res.status(200).json(entity);
 		} catch (error) {
-            if (error instanceof NoEntityError) {
+			if (error instanceof NoEntityError) {
 				res.status(400).send({ error: `${error}` });
-			} else{
-			    res.status(500).send({ message: `${error.message}` });
-            }
+			} else {
+				res.status(500).send({ message: `${error.message}` });
+			}
 		}
 	};
 
@@ -32,10 +32,10 @@ class BlockController {
 		try {
 			const createdEntity = await Entity.create({
 				name: req.body.name,
-                peopleLimit: req.body.peopleLimit,
-                description: req.body.description,
-                spaceId: req.body.spaceId,
-                blockCategoryId: req.body.blockCategoryId
+				peopleLimit: req.body.peopleLimit,
+				description: req.body.description,
+				spaceId: req.body.spaceId,
+				blockCategoryId: req.body.blockCategoryId
 			});
 			res.status(201).send({
 				blockCategory: createdEntity
@@ -62,8 +62,8 @@ class BlockController {
 
 			entity.set({
 				name: req.body.name,
-                peopleLimit: req.body.peopleLimit,
-                description: req.body.description
+				peopleLimit: req.body.peopleLimit,
+				description: req.body.description
 			});
 
 			await entity.save();
