@@ -3,7 +3,7 @@ import swaggerUi from 'swagger-ui-express';
 import users from './userRoutes.js';
 import owners from './ownerRoutes.js'
 import spaces from './spaceRoutes.js';
-import swaggerFile from '../../swagger_output.json' assert { type: 'json' };
+import swaggerFile from '../../swagger/swagger_output.json' assert { type: 'json' };
 import blockCategory from './blockCategoryRoutes.js'
 import block from './blockRoutes.js'
 
