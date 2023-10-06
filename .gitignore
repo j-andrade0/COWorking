@@ -107,7 +107,7 @@ dist
 .idea
 .vscode
 
-/backend/swagger_output.json
+swagger_output.json
 
 # file to start the server
 run.sh 
