@@ -79,9 +79,7 @@ class OwnerController {
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
-			if (error instanceof ValidationError) {
-				res.status(400).send({ error: `${error}` });
-			} else if (error instanceof NoEntityError) {
+			if (error instanceof ValidationError || error instanceof NoEntityError) {
 				res.status(400).send({ error: `${error}` });
 			} else if (error.name == 'SequelizeUniqueConstraintError') {
 				res.status(400).send({ message: 'Values already registered' });
