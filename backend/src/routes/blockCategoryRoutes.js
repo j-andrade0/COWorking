@@ -16,7 +16,7 @@ router.post('/blockCategory', authorizationMiddleware, BlockCategoryController.c
 	/* #swagger.tags = ['BlockCategory']*/
 });
 
-router.put('/blockCategory/:id', authorizationMiddleware, BlockCategoryController.updateEntityName, () => {
+router.patch('/blockCategory/:id', authorizationMiddleware, BlockCategoryController.updateEntityData, () => {
     /* #swagger.tags = ['BlockCategory']*/
 })
 

@@ -16,7 +16,7 @@ router.post('/block', authorizationMiddleware, Block.createEntity, () => {
 	/* #swagger.tags = ['Block']*/
 });
 
-router.put('/block/:id', authorizationMiddleware, Block.updateEntityData, () => {
+router.patch('/block/:id', authorizationMiddleware, Block.updateEntityData, () => {
     /* #swagger.tags = ['Block']*/
 })
 

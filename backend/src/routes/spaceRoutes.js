@@ -16,15 +16,7 @@ router.post('/spaces', authorizationMiddleware, SpaceController.createEntity, ()
 	/* #swagger.tags = ['Space']*/
 });
 
-router.patch('/spaces/address/:id', authorizationMiddleware, SpaceController.updateEntityAddress, () => {
-	/* #swagger.tags = ['Space']*/
-});
-
-router.patch('/spaces/size/:id', authorizationMiddleware, SpaceController.updateEntitySize, () => {
-	/* #swagger.tags = ['Space']*/
-});
-
-router.patch('/spaces/description/:id', authorizationMiddleware, SpaceController.updateEntityDescription, () => {
+router.patch('/spaces/:id', authorizationMiddleware, SpaceController.updateEntityData, () => {
 	/* #swagger.tags = ['Space']*/
 });
 

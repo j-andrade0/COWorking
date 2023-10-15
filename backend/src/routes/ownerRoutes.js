@@ -17,20 +17,8 @@ router.post('/owners', OwnerController.createEntity, () => {
 	/* #swagger.tags = ['Owner']*/
 });
 
-// router.put('/owners/:id', OwnerController.updateFullEntity, () => { // must be acessed just by admins
+ router.patch('/owners/:id', authorizationMiddleware, OwnerController.updateEntityData, () => {
 /* #swagger.tags = ['Owner']*/
-// });
-
-router.patch('/owners/name/:id', authorizationMiddleware, OwnerController.updateEntityName, () => {
-	/* #swagger.tags = ['Owner']*/
-});
-
-router.patch('/owners/profilePhoto/:id', authorizationMiddleware, OwnerController.updateEntityProfilePhoto, () => {
-	/* #swagger.tags = ['Owner']*/
-});
-
-router.patch('/owners/email/:id', authorizationMiddleware, OwnerController.updateEntityEmail, () => {
-	/* #swagger.tags = ['Owner']*/
 });
 
 router.post('/ownerLogin', OwnerAuth.login, () => {

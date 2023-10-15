@@ -70,7 +70,7 @@ class UserController {
 		}
 	};
 
-	static updateFullEntity = async (req, res) => {
+	static updateEntityData = async (req, res) => {
 		try {
 			const entity = await Entity.findByPk(req.params.id);
 			if (!entity) {
@@ -79,98 +79,19 @@ class UserController {
 			if (!req.body) {
 				throw new ValidationError('No body provided!');
 			}
-			await entity.update(req.body);
-			res.status(200).json(entity);
-		} catch (error) {
-			if (error instanceof ValidationError) {
-				res.status(400).send({ error: `${error}` });
-			} else if (error instanceof NoEntityError) {
-				res.status(400).send({ error: `${error}` });
-			} else if (error.name == 'SequelizeUniqueConstraintError') {
-				res.status(400).send({ message: 'Values already registered' });
-			} else {
-				res.status(500).send({ error: `${error}` });
-			}
-		}
-	};
-
-	static updateEntityName = async (req, res) => {
-		try {
-			const entity = await Entity.findByPk(req.params.id);
-			if (!entity) {
-				throw new NoEntityError('No entity was found by this id!');
-			}
-
-			if (!req.body.firstName || !req.body.lastName) {
-				throw new ValidationError('No name provided!');
-			}
 
 			entity.set({
 				firstName: req.body.firstName,
-				lastName: req.body.lastName
+				lastName: req.body.lastName,
+				profilePhoto: req.body.profilePhoto,
+				email: req.body.email,
+				phoneNumber: req.body.phoneNumber
 			});
 
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
-			if (error instanceof ValidationError) {
-				res.status(400).send({ error: `${error}` });
-			} else if (error instanceof NoEntityError) {
-				res.status(400).send({ error: `${error}` });
-			} else {
-				res.status(500).send({ error: `${error}` });
-			}
-		}
-	};
-
-	static updateEntityProfilePhoto = async (req, res) => {
-		try {
-			const entity = await Entity.findByPk(req.params.id);
-			if (!entity) {
-				throw new NoEntityError('No entity was found by this id!');
-			}
-
-			if (!req.body.profilePhoto) {
-				throw new ValidationError('No path to profile photo provided!');
-			}
-
-			entity.set({
-				profilePhoto: req.body.profilePhoto
-			});
-
-			await entity.save();
-			res.status(200).json(entity);
-		} catch (error) {
-			if (error instanceof ValidationError) {
-				res.status(400).send({ error: `${error}` });
-			} else if (error instanceof NoEntityError) {
-				res.status(400).send({ error: `${error}` });
-			} else if (error.name == 'SequelizeUniqueConstraintError') {
-				res.status(400).send({ message: 'Values already registered' });
-			} else {
-				res.status(500).send({ error: `${error}` });
-			}
-		}
-	};
-
-	static updateEntityEmail = async (req, res) => {
-		try {
-			const entity = await Entity.findByPk(req.params.id);
-			if (!entity) {
-				throw new NoEntityError('No entity was found by this id!');
-			}
-			if (!req.body.email) {
-				throw new ValidationError('No email provided!');
-			}
-			entity.set({
-				email: req.body.email
-			});
-			await entity.save();
-			res.status(200).json(entity);
-		} catch (error) {
-			if (error instanceof ValidationError) {
-				res.status(400).send({ error: `${error}` });
-			} else if (error instanceof NoEntityError) {
+			if (error instanceof ValidationError || error instanceof NoEntityError) {
 				res.status(400).send({ error: `${error}` });
 			} else if (error.name == 'SequelizeUniqueConstraintError') {
 				res.status(400).send({ message: 'Values already registered' });

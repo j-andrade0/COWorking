@@ -46,80 +46,26 @@ class SpaceController {
 		}
 	};
 
-	static updateEntityAddress = async (req, res) => {
+	static updateEntityData = async (req, res) => {
 		try {
 			const entity = await Entity.findByPk(req.params.id);
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
 			}
-			if (!req.body.address) {
-				throw new ValidationError('No address provided!');
+			if (!req.body) {
+				throw new ValidationError('No body provided!');
 			}
 
 			entity.set({
-				address: req.body.address
-			});
-
-			await entity.save();
-			res.status(200).json(entity);
-		} catch (error) {
-			if (error instanceof ValidationError) {
-				res.status(400).send({ error: `${error}` });
-			} else if (error instanceof NoEntityError) {
-				res.status(400).send({ error: `${error}` });
-			} else {
-				res.status(500).send({ error: `${error}` });
-			}
-		}
-	};
-
-	static updateEntitySize = async (req, res) => {
-		try {
-			const entity = await Entity.findByPk(req.params.id);
-			if (!entity) {
-				throw new NoEntityError('No entity was found by this id!');
-			}
-			if (!req.body.size) {
-				throw new ValidationError('No size provided!');
-			}
-
-			entity.set({
-				size: req.body.size
-			});
-
-			await entity.save();
-			res.status(200).json(entity);
-		} catch (error) {
-			if (error instanceof ValidationError) {
-				res.status(400).send({ error: `${error}` });
-			} else if (error instanceof NoEntityError) {
-				res.status(400).send({ error: `${error}` });
-			} else {
-				res.status(500).send({ error: `${error}` });
-			}
-		}
-	};
-
-	static updateEntityDescription = async (req, res) => {
-		try {
-			const entity = await Entity.findByPk(req.params.id);
-			if (!entity) {
-				throw new NoEntityError('No entity was found by this id!');
-			}
-			if (!req.body.description) {
-				throw new ValidationError('No description provided!');
-			}
-
-			entity.set({
+				address: req.body.address,
+				size: req.body.size,
 				description: req.body.description
 			});
 
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
-			if (error instanceof ValidationError) {
-				res.status(400).send({ error: `${error}` });
-			} else if (error instanceof NoEntityError) {
+			if (error instanceof ValidationError || error instanceof NoEntityError) {
 				res.status(400).send({ error: `${error}` });
 			} else {
 				res.status(500).send({ error: `${error}` });
