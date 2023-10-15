@@ -6,14 +6,16 @@ import spaces from './spaceRoutes.js';
 import swaggerFile from '../../swagger/swagger_output.json' assert { type: 'json' };
 import blockCategory from './blockCategoryRoutes.js'
 import block from './blockRoutes.js'
+import blockReservation from './blockReservationRoutes.js'
 
 const routes = (app) => {
 	app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 	app.use(express.json(), users);
-	app.use(express.json(), owners)
-	app.use(express.json(), spaces)
-	app.use(express.json(), blockCategory)
-	app.use(express.json(), block)
+	app.use(express.json(), owners);
+	app.use(express.json(), spaces);
+	app.use(express.json(), blockCategory);
+	app.use(express.json(), block);
+	app.use(express.json(), blockReservation);
 };
 
 export default routes;
