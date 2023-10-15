@@ -56,7 +56,7 @@ class OwnerController {
 		}
 	};
 
-	static updateEntity = async (req, res) => {
+	static updateEntityData = async (req, res) => {
 		try {
 			const entity = await Entity.findByPk(req.params.id);
 			if (!entity) {

@@ -16,7 +16,7 @@ router.post('/blockReservation', authorizationMiddleware, BlockReservationContro
 	/* #swagger.tags = ['BlockReservation']*/
 });
 
-router.put('/blockReservation/:id', authorizationMiddleware, BlockReservationController.updateEntityDate, () => {
+router.patch('/blockReservation/:id', authorizationMiddleware, BlockReservationController.updateEntityData, () => {
     /* #swagger.tags = ['BlockReservation']*/
 })
 
