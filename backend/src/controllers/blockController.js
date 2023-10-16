@@ -1,6 +1,8 @@
 import Entity from '../models/Block.js';
 import ValidationError from '../util/customErrors/ValidationError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
+import Reservations from '../models/BlockReservation.js'
+
 
 class BlockController {
 	static getAllEntities = async (req, res) => {
@@ -89,6 +91,28 @@ class BlockController {
 				});
 			}
 		} catch (error) {
+			return res.status(500).send({ message: `${error}` });
+		}
+	};
+
+	static getReservations = async (req, res) => {
+		try {
+			const entity = await Entity.findByPk(req.params.id);
+			if (!entity) {
+				throw new NoEntityError('No entity was found by this id!');
+			}
+			
+			const reservations = await Reservations.findAll({
+				where: {
+					blockId: req.params.id
+				}
+			});
+
+			return res.status(200).send(reservations)
+		} catch (error) {
+			if (error instanceof ValidationError) {
+				res.status(400).send({ error: `${error}` });
+			}
 			return res.status(500).send({ message: `${error}` });
 		}
 	};

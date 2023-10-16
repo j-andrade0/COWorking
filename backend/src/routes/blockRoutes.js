@@ -24,4 +24,8 @@ router.delete('/block/:id', authorizationMiddleware, Block.deleteEntity, () => {
 	/* #swagger.tags = ['Block']*/
 });
 
+router.get('/block/reservations/:id', authorizationMiddleware, Block.getReservations, () => {
+	/* #swagger.tags = ['Block']*/
+});
+
 export default router;

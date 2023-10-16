@@ -43,4 +43,8 @@ router.delete('/users/:id', UserController.deleteEntity, () => {
 /* #swagger.responses[500] */
 });
 
+router.get('/users/reservations/:id', authorizationMiddleware, UserController.getReservations, () => {
+	/* #swagger.tags = ['User']*/
+});
+
 export default router;
