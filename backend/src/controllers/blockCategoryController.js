@@ -1,5 +1,5 @@
 import Entity from '../models/BlockCategory.js';
-import ValidationError from '../util/customErrors/ValidationError.js';
+import MissingBodyError from '../util/customErrors/MissingBodyError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
 
 class BlockCategoryController {
@@ -52,7 +52,7 @@ class BlockCategoryController {
 				throw new NoEntityError('No entity was found by this id!');
 			}
 			if (!req.body.name) {
-				throw new ValidationError('No name provided!');
+				throw new MissingBodyError('No name provided!');
 			}
 
 			entity.set({
@@ -62,7 +62,7 @@ class BlockCategoryController {
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
-			if (error instanceof ValidationError || error instanceof NoEntityError) {
+			if (error instanceof MissingBodyError || error instanceof NoEntityError) {
 				res.status(400).send({ error: `${error}` });
 			} else {
 				res.status(500).send({ error: `${error}` });

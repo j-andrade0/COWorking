@@ -1,6 +1,8 @@
 import Entity from '../models/BlockReservation.js';
-import ValidationError from '../util/customErrors/ValidationError.js';
+import MissingBodyError from '../util/customErrors/MissingBodyError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
+import ValidationError from '../util/customErrors/ValidationError.js';
+import ValidateReservation from '../util/validateReservation.js';
 
 class BlockReservationController {
 	static getAllEntities = async (req, res) => {
@@ -30,18 +32,27 @@ class BlockReservationController {
 
 	static createEntity = async (req, res) => {
 		try {
+			const { startDate, endDate, userId, blockId } = req.body;
+
+			await ValidateReservation.validateEntity(userId, blockId);
+			ValidateReservation.compareDate(startDate, endDate);
+			await ValidateReservation.isValidSchedule(blockId, startDate, endDate)
+
 			const createdEntity = await Entity.create({
-				startDate: req.body.startDate,
-				endDate: req.body.endDate,
-				userId: req.body.userId,
-				blockId: req.body.blockId
+				startDate: startDate,
+				endDate: endDate,
+				userId: userId,
+				blockId: blockId
 			});
+
 			res.status(201).send({
 				blockCategory: createdEntity
 			});
 		} catch (error) {
 			if (error.name == 'SequelizeUniqueConstraintError') {
 				res.status(400).send({ message: 'Values already registered' });
+			} else if (error instanceof ValidationError || error instanceof NoEntityError) {
+				res.status(400).send({ message: error.message });
 			} else {
 				res.status(500).send({ message: `${error.message}` });
 			}
@@ -55,7 +66,7 @@ class BlockReservationController {
 				throw new NoEntityError('No entity was found by this id!');
 			}
 			if (!req.body) {
-				throw new ValidationError('No data provided!');
+				throw new MissingBodyError('No data provided!');
 			}
 
 			entity.set({
@@ -66,7 +77,7 @@ class BlockReservationController {
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
-			if (error instanceof ValidationError || error instanceof NoEntityError) {
+			if (error instanceof MissingBodyError || error instanceof NoEntityError) {
 				res.status(400).send({ error: `${error}` });
 			} else {
 				res.status(500).send({ error: `${error}` });

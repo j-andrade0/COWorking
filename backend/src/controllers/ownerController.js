@@ -1,5 +1,5 @@
 import Entity from '../models/Owner.js';
-import ValidationError from '../util/customErrors/ValidationError.js';
+import MissingBodyError from '../util/customErrors/MissingBodyError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
 import speakeasy from 'speakeasy';
 
@@ -63,7 +63,7 @@ class OwnerController {
 				throw new NoEntityError('No entity was found by this id!');
 			}
 			if (!req.body) {
-				throw new ValidationError('No body provided!');
+				throw new MissingBodyError('No body provided!');
 			}
 
 			entity.set({
@@ -79,7 +79,7 @@ class OwnerController {
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
-			if (error instanceof ValidationError || error instanceof NoEntityError) {
+			if (error instanceof MissingBodyError || error instanceof NoEntityError) {
 				res.status(400).send({ error: `${error}` });
 			} else if (error.name == 'SequelizeUniqueConstraintError') {
 				res.status(400).send({ message: 'Values already registered' });
