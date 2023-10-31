@@ -3,6 +3,7 @@ import MissingBodyError from '../util/customErrors/MissingBodyError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
 import speakeasy from 'speakeasy';
 import Reservations from '../models/BlockReservation.js';
+import bcrypt from 'bcrypt';
 
 class UserController {
 	static getAllEntities = async (req, res) => {
@@ -46,17 +47,21 @@ class UserController {
 
 	static createEntity = async (req, res) => {
 		try {
+			const { firstName, lastName, cpf, email, phoneNumber, profilePhoto } = req.body;
 			const temp_secret = speakeasy.generateSecret();
+			const hashedPassword = await bcrypt.hash(senha, 10);
+
 			const createdEntity = await Entity.create({
-				firstName: req.body.firstName,
-				lastName: req.body.lastName,
-				cpf: req.body.cpf,
-				email: req.body.email,
+				firstName,
+				lastName,
+				cpf,
+				email,
+				password: hashedPassword,
 				secret: temp_secret.base32,
 				isTempSecret: true,
 				// birthDate: req.body.birthDate, //problems with formatting
-				phoneNumber: req.body.phoneNumber,
-				profilePhoto: req.body.profilePhoto
+				phoneNumber,
+				profilePhoto
 			});
 			res.status(201).send({
 				userId: createdEntity.id,
@@ -131,7 +136,7 @@ class UserController {
 				}
 			});
 
-			return res.status(200).send(reservations)
+			return res.status(200).send(reservations);
 		} catch (error) {
 			if (error instanceof NoEntityError) {
 				res.status(400).send({ error: `${error}` });

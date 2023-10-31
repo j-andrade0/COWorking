@@ -2,13 +2,14 @@ import Entity from '../../models/User.js';
 import NoEntityError from '../../util/customErrors/NoEntityError.js';
 import speakeasy from 'speakeasy';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 class UserAuth {
 	static login = async (req, res) => {
-		const userId = req.body.userId;
-		const totpToken = req.body.token;
+		const { userId, password, totpToken } = req.body;
+
 		try {
-			const tokenCheckResult = await this.checkToken(userId, totpToken);
+			const tokenCheckResult = await this.checkToken(userId, totpToken, password);
 
 			if (tokenCheckResult) {
 				const jwtToken = jwt.sign({ id: userId }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
@@ -21,7 +22,7 @@ class UserAuth {
 		}
 	};
 
-	static checkToken = async (userId, totpToken) => {
+	static checkToken = async (userId, totpToken, password) => {
 		try {
 			const entity = await Entity.findByPk(userId);
 
@@ -30,7 +31,7 @@ class UserAuth {
 			}
 
 			const isVerifiedToken = await this.verifyToken(entity, totpToken);
-			const isValidToken = this.validateToken(entity, totpToken);
+			const isValidToken = await this.validateToken(entity, totpToken, password);
 
 			if (!isVerifiedToken || !isValidToken) {
 				return false;
@@ -74,7 +75,7 @@ class UserAuth {
 		}
 	};
 
-	static validateToken = (entity, token) => {
+	static validateToken = async (entity, token, password) => {
 		// validate if the token provided is valid, returns true of false
 		try {
 			const secret = entity.secret;
@@ -86,7 +87,9 @@ class UserAuth {
 				window: 1
 			});
 
-			return isValidToken;
+			const isPasswordValid = await bcrypt.compare(password, entity.password);
+
+			return isValidToken && isPasswordValid;
 		} catch (error) {
 			throw new Error('Error on validating');
 		}
@@ -99,11 +102,11 @@ class UserAuth {
 
 		const entity = await Entity.findByPk(userId);
 
-		if(entity.isTempSecret){
+		if (entity.isTempSecret) {
 			const newSecret = speakeasy.generateSecret();
 
 			entity.set({
-				secret: newSecret.base32,
+				secret: newSecret.base32
 			});
 
 			await entity.save();
@@ -111,7 +114,7 @@ class UserAuth {
 			return res.status(201).send({
 				qrCodeUrl: `${newSecret.otpauth_url}`
 			});
-		} else return res.status(400).send({msg: 'This user has a permanent secret'})
+		} else return res.status(400).send({ msg: 'This user has a permanent secret' });
 	};
 }
 export default UserAuth;

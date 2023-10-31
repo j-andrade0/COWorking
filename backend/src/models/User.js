@@ -27,6 +27,10 @@ const User = db.define(
 			allowNull: false,
 			unique: true
 		},
+		password: {
+			type: DataTypes.STRING(64),
+			allowNull: false
+		},
 		secret: {
 			type: DataTypes.STRING,
 			allowNull: false,
