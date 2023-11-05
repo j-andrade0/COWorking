@@ -47,9 +47,9 @@ class UserController {
 
 	static createEntity = async (req, res) => {
 		try {
-			const { firstName, lastName, cpf, email, phoneNumber, profilePhoto } = req.body;
+			const { firstName, lastName, cpf, email, password, phoneNumber, profilePhoto } = req.body;
 			const temp_secret = speakeasy.generateSecret();
-			const hashedPassword = await bcrypt.hash(senha, 10);
+			const hashedPassword = await bcrypt.hash(password, 10);
 
 			const createdEntity = await Entity.create({
 				firstName,
