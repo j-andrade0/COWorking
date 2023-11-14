@@ -9,6 +9,12 @@ class UserController {
 	static getAllEntities = async (req, res) => {
 		try {
 			const users = await Entity.findAll();
+
+			users.forEach((user) => {
+				delete user.dataValues.password;
+				delete user.dataValues.secret;
+			});
+
 			res.status(200).json(users);
 		} catch (error) {
 			res.status(500).send({ message: `${error.message}` });
@@ -18,6 +24,10 @@ class UserController {
 	static getEntityById = async (req, res) => {
 		try {
 			const entity = await Entity.findByPk(req.params.id);
+
+			delete entity.dataValues.password;
+			delete entity.dataValues.secret;
+
 			if (entity) {
 				return res.status(200).json(entity);
 			} else {
