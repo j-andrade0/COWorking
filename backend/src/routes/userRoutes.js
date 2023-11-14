@@ -1,6 +1,5 @@
 import express from 'express';
 import UserController from '../controllers/userController.js';
-import UserAuth from '../controllers/auth/userAuth.js';
 import authorizationMiddleware from '../middlewares/authorizationMiddleware.js'
 
 const router = express.Router();
@@ -27,11 +26,7 @@ router.post('/users', UserController.createEntity, () => {
 /* #swagger.tags = ['User']*/
  });
 
-router.post('/users/newSecret/:id', UserAuth.newSecret, () => {
-	/* #swagger.tags = ['User'] */
-});
-
-router.post('/userLogin', UserAuth.login, () => {
+router.post('/userLogin', UserController.login, () => {
 	/* #swagger.tags = ['User'] */
 });
 

@@ -31,15 +31,6 @@ const User = db.define(
 			type: DataTypes.STRING(64),
 			allowNull: false
 		},
-		secret: {
-			type: DataTypes.STRING,
-			allowNull: false,
-			unique: true
-		},
-		isTempSecret: {
-			type: DataTypes.BOOLEAN,
-			allowNull: false
-		},
 		// birthDate: {  // problems with formatting
 		// 	type: DataTypes.DATEONLY,
 		// 	allowNull: false

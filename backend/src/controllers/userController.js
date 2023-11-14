@@ -1,8 +1,9 @@
 import Entity from '../models/User.js';
 import MissingBodyError from '../util/customErrors/MissingBodyError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
-import speakeasy from 'speakeasy';
+// import speakeasy from 'speakeasy';
 import Reservations from '../models/BlockReservation.js';
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
 class UserController {
@@ -25,10 +26,9 @@ class UserController {
 		try {
 			const entity = await Entity.findByPk(req.params.id);
 
-			delete entity.dataValues.password;
-			delete entity.dataValues.secret;
-
 			if (entity) {
+				delete entity.dataValues.password;
+				delete entity.dataValues.secret;
 				return res.status(200).json(entity);
 			} else {
 				return res.status(400).send({
@@ -58,7 +58,6 @@ class UserController {
 	static createEntity = async (req, res) => {
 		try {
 			const { firstName, lastName, cpf, email, password, phoneNumber, profilePhoto } = req.body;
-			const temp_secret = speakeasy.generateSecret();
 			const hashedPassword = await bcrypt.hash(password, 10);
 
 			const createdEntity = await Entity.create({
@@ -67,15 +66,15 @@ class UserController {
 				cpf,
 				email,
 				password: hashedPassword,
-				secret: temp_secret.base32,
-				isTempSecret: true,
 				// birthDate: req.body.birthDate, //problems with formatting
 				phoneNumber,
 				profilePhoto
 			});
+
+			delete createdEntity.dataValues.password;
+
 			res.status(201).send({
-				userId: createdEntity.id,
-				qrCodeUrl: `${temp_secret.otpauth_url}`
+				createdEntity
 			});
 		} catch (error) {
 			if (error.name == 'SequelizeUniqueConstraintError') {
@@ -152,6 +151,29 @@ class UserController {
 				res.status(400).send({ error: `${error}` });
 			}
 			return res.status(500).send({ message: `${error}` });
+		}
+	};
+
+	static login = async (req, res) => {
+		const { email, password } = req.body;
+
+		try {
+			const entity = await Entity.findOne({ where: { email: email } });
+
+			if (!entity) {
+				throw new NoEntityError('Entity not found');
+			}
+
+			const isPasswordValid = await bcrypt.compare(password, entity.password);
+
+			if (isPasswordValid) {
+				const jwtToken = jwt.sign({ id: entity.id }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+				return res.status(200).json({ jwtToken });
+			} else {
+				return res.status(401).send({ message: 'Please send the right password and token' });
+			}
+		} catch (error) {
+			res.status(400).json({ error: error.message });
 		}
 	};
 }
