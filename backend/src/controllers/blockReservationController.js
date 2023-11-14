@@ -46,7 +46,7 @@ class BlockReservationController {
 			});
 
 			res.status(201).send({
-				blockCategory: createdEntity
+				blockReservation: createdEntity
 			});
 		} catch (error) {
 			if (error.name == 'SequelizeUniqueConstraintError') {
