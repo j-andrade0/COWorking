@@ -36,7 +36,7 @@ class BlockReservationController {
 
 			await ValidateReservation.validateEntity(userId, blockId);
 			ValidateReservation.compareDate(startDate, endDate);
-			await ValidateReservation.isValidSchedule(blockId, startDate, endDate)
+			await ValidateReservation.isValidSchedule(blockId, startDate, endDate);
 
 			const createdEntity = await Entity.create({
 				startDate: startDate,

@@ -1,6 +1,6 @@
 import express from 'express';
 import BlockCategoryController from '../controllers/blockCategoryController.js';
-import authorizationMiddleware from '../middlewares/authorizationMiddleware.js'
+import authorizationMiddleware from '../middlewares/authorizationMiddleware.js';
 
 const router = express.Router();
 
@@ -17,8 +17,8 @@ router.post('/blockCategory', authorizationMiddleware, BlockCategoryController.c
 });
 
 router.patch('/blockCategory/:id', authorizationMiddleware, BlockCategoryController.updateEntityData, () => {
-    /* #swagger.tags = ['BlockCategory']*/
-})
+	/* #swagger.tags = ['BlockCategory']*/
+});
 
 router.delete('/blockCategory/:id', authorizationMiddleware, BlockCategoryController.deleteEntity, () => {
 	/* #swagger.tags = ['BlockCategory']*/

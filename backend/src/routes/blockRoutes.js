@@ -1,6 +1,6 @@
 import express from 'express';
 import Block from '../controllers/blockController.js';
-import authorizationMiddleware from '../middlewares/authorizationMiddleware.js'
+import authorizationMiddleware from '../middlewares/authorizationMiddleware.js';
 
 const router = express.Router();
 
@@ -17,8 +17,8 @@ router.post('/block', authorizationMiddleware, Block.createEntity, () => {
 });
 
 router.patch('/block/:id', authorizationMiddleware, Block.updateEntityData, () => {
-    /* #swagger.tags = ['Block']*/
-})
+	/* #swagger.tags = ['Block']*/
+});
 
 router.delete('/block/:id', authorizationMiddleware, Block.deleteEntity, () => {
 	/* #swagger.tags = ['Block']*/

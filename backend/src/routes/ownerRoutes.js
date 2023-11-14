@@ -16,8 +16,8 @@ router.post('/owners', OwnerController.createEntity, () => {
 	/* #swagger.tags = ['Owner']*/
 });
 
- router.patch('/owners/:id', authorizationMiddleware, OwnerController.updateEntityData, () => {
-/* #swagger.tags = ['Owner']*/
+router.patch('/owners/:id', authorizationMiddleware, OwnerController.updateEntityData, () => {
+	/* #swagger.tags = ['Owner']*/
 });
 
 router.post('/ownerLogin', OwnerController.login, () => {

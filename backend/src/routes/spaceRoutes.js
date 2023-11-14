@@ -1,6 +1,6 @@
 import express from 'express';
 import SpaceController from '../controllers/spaceController.js';
-import authorizationMiddleware from '../middlewares/authorizationMiddleware.js'
+import authorizationMiddleware from '../middlewares/authorizationMiddleware.js';
 
 const router = express.Router();
 

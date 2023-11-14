@@ -38,7 +38,7 @@ const Owner = db.define('Owner', {
 		type: DataTypes.STRING,
 		allowNull: true,
 		unique: true
-	},
-    // add bankAccount Relationship
+	}
+	// add bankAccount Relationship
 });
 export default Owner;

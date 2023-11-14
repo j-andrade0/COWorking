@@ -36,7 +36,7 @@ class ValidateReservation {
 		for (const reserve of reservations) {
 			const convertedStartDate = this.convertGMTDate(reserve.startDate);
 			const convertedEndDate = this.convertGMTDate(reserve.endDate);
-			
+
 			if (
 				(startDate >= convertedStartDate && startDate < convertedEndDate) ||
 				(endDate > convertedStartDate && endDate <= convertedEndDate) ||

@@ -1,6 +1,6 @@
 import express from 'express';
 import UserController from '../controllers/userController.js';
-import authorizationMiddleware from '../middlewares/authorizationMiddleware.js'
+import authorizationMiddleware from '../middlewares/authorizationMiddleware.js';
 
 const router = express.Router();
 
@@ -14,28 +14,22 @@ router.get('/users/:id', authorizationMiddleware, UserController.getEntityById, 
 
 router.get('/users/validateUser', UserController.getEntityByEmail, () => {
 	/* #swagger.tags = ['User']*/
-	/* #swagger.responses[201] */
-	/* #swagger.responses[500] */
 });
 
 router.post('/users', UserController.createEntity, () => {
 	/* #swagger.tags = ['User']*/
 });
 
- router.patch('/users/:id', authorizationMiddleware, UserController.updateEntityData, () => {
-/* #swagger.tags = ['User']*/
- });
+router.patch('/users/:id', authorizationMiddleware, UserController.updateEntityData, () => {
+	/* #swagger.tags = ['User']*/
+});
 
 router.post('/userLogin', UserController.login, () => {
 	/* #swagger.tags = ['User'] */
 });
 
-
 router.delete('/users/:id', UserController.deleteEntity, () => {
-/* #swagger.tags = ['User']*/
-/* #swagger.responses[204] *
-/* #swagger.responses[400] */
-/* #swagger.responses[500] */
+	/* #swagger.tags = ['User']*/
 });
 
 router.get('/users/reservations/:id', authorizationMiddleware, UserController.getReservations, () => {

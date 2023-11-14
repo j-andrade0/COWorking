@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import db from '../config/dbConnect.js';
-import Owner from './Owner.js'
+import Owner from './Owner.js';
 
 const Space = db.define(
 	'Space',
@@ -35,6 +35,6 @@ const Space = db.define(
 Owner.hasMany(Space, {
 	foreignKey: 'ownerId',
 	onDelete: 'cascade'
-})
+});
 
 export default Space;
