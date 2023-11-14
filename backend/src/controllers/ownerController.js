@@ -1,12 +1,17 @@
 import Entity from '../models/Owner.js';
 import MissingBodyError from '../util/customErrors/MissingBodyError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
-import speakeasy from 'speakeasy';
+import bcrypt from 'bcrypt';
 
 class OwnerController {
 	static getAllEntities = async (req, res) => {
 		try {
 			const entities = await Entity.findAll();
+
+			entities.forEach((entity) => {
+				delete entity.dataValues.password;
+			});
+
 			res.status(200).json(entities);
 		} catch (error) {
 			res.status(500).send({ message: `${error.message}` });
@@ -16,6 +21,7 @@ class OwnerController {
 	static getEntityById = async (req, res) => {
 		try {
 			const entity = await Entity.findByPk(req.params.id);
+
 			if (entity) {
 				res.status(200).json(entity);
 			} else {
@@ -30,22 +36,24 @@ class OwnerController {
 
 	static createEntity = async (req, res) => {
 		try {
-			const temp_secret = speakeasy.generateSecret();
+			const { nomeEmpresarial, nomeFantasia, cnpj, email, password, phoneNumber, profilePhoto } = req.body;
+
+			const hashedPassword = await bcrypt.hash(password, 10);
+
 			const createdEntity = await Entity.create({
-				nomeEmpresarial: req.body.nomeEmpresarial,
-				nomeFantasia: req.body.nomeFantasia,
-				firstName: req.body.firstName,
-				lastName: req.body.lastName,
-				document: req.body.document,
-				email: req.body.email,
-				secret: temp_secret.base32,
-				isTempSecret: true,
-				phoneNumber: req.body.phoneNumber,
-				profilePhoto: req.body.profilePhoto
+				nomeEmpresarial,
+				nomeFantasia,
+				cnpj,
+				email,
+				password,
+				hashedPassword,
+				phoneNumber,
+				profilePhoto
 			});
+			delete createdEntity.dataValues.password;
+
 			res.status(201).send({
-				userId: createdEntity.id,
-				qrCodeUrl: `${temp_secret.otpauth_url}`
+				createdEntity
 			});
 		} catch (error) {
 			if (error.name == 'SequelizeUniqueConstraintError') {
@@ -59,9 +67,11 @@ class OwnerController {
 	static updateEntityData = async (req, res) => {
 		try {
 			const entity = await Entity.findByPk(req.params.id);
+
 			if (!entity) {
 				throw new NoEntityError('No entity was found by this id!');
 			}
+
 			if (!req.body) {
 				throw new MissingBodyError('No body provided!');
 			}
@@ -77,6 +87,7 @@ class OwnerController {
 			});
 
 			await entity.save();
+
 			res.status(200).json(entity);
 		} catch (error) {
 			if (error instanceof MissingBodyError || error instanceof NoEntityError) {
@@ -92,8 +103,10 @@ class OwnerController {
 	static deleteEntity = async (req, res) => {
 		try {
 			const entity = await Entity.findByPk(req.params.id);
+
 			if (entity) {
 				await entity.destroy();
+
 				return res.status(204).send();
 			} else {
 				return res.status(400).send({
@@ -102,6 +115,30 @@ class OwnerController {
 			}
 		} catch (error) {
 			return res.status(500).send({ message: `${error}` });
+		}
+	};
+
+	static login = async (req, res) => {
+		const { email, password } = req.body;
+
+		try {
+			const entity = await Entity.findOne({ where: { email: email } });
+
+			if (!entity) {
+				throw new NoEntityError('Entity not found');
+			}
+
+			const isPasswordValid = await bcrypt.compare(password, entity.password);
+
+			if (isPasswordValid) {
+				const jwtToken = jwt.sign({ id: entity.id }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+
+				return res.status(200).json({ jwtToken });
+			} else {
+				return res.status(401).send({ message: 'Please send the right password and token' });
+			}
+		} catch (error) {
+			res.status(400).json({ error: error.message });
 		}
 	};
 }

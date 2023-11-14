@@ -1,6 +1,5 @@
 import express from 'express';
 import OwnerController from '../controllers/ownerController.js';
-import OwnerAuth from '../controllers/auth/ownerAuth.js';
 import authorizationMiddleware from '../middlewares/authorizationMiddleware.js';
 
 const router = express.Router();
@@ -21,7 +20,7 @@ router.post('/owners', OwnerController.createEntity, () => {
 /* #swagger.tags = ['Owner']*/
 });
 
-router.post('/ownerLogin', OwnerAuth.login, () => {
+router.post('/ownerLogin', OwnerController.login, () => {
 	/* #swagger.tags = ['Owner'] */
 });
 

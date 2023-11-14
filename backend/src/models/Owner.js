@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import db from '../config/dbConnect.js';
-// need to review names
+
 const Owner = db.define('Owner', {
 	id: {
 		type: DataTypes.INTEGER,
@@ -15,15 +15,7 @@ const Owner = db.define('Owner', {
 		type: DataTypes.STRING,
 		allowNull: false
 	},
-	firstName: {
-		type: DataTypes.STRING,
-		allowNull: false
-	},
-	lastName: {
-		type: DataTypes.STRING,
-		allowNull: false
-	},
-	document: {
+	cnpj: {
 		type: DataTypes.STRING,
 		allowNull: false,
 		unique: true
@@ -33,13 +25,8 @@ const Owner = db.define('Owner', {
 		allowNull: false,
 		unique: true
 	},
-	secret: {
-		type: DataTypes.STRING,
-		allowNull: false,
-		unique: true
-	},
-	isTempSecret: {
-		type: DataTypes.BOOLEAN,
+	password: {
+		type: DataTypes.STRING(64),
 		allowNull: false
 	},
 	phoneNumber: {
