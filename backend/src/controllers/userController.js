@@ -7,14 +7,31 @@ import bcrypt from 'bcrypt';
 
 class UserController {
 	static getAllEntities = async (req, res) => {
-		try {
-			const users = await Entity.findAll();
+		const { page = 1 } = req.query;
+		const limit = 10;
+		let lastPage = 1;
+		const countEntity = await Entity.count();
 
-			users.forEach((user) => {
-				delete user.dataValues.password;
+		try {
+			const entities = await Entity.findAll({
+				order: [['id', 'ASC']],
+				offset: Number(page * limit - limit),
+				limit: limit
 			});
 
-			res.status(200).json(users);
+			entities.forEach((entity) => {
+				delete entity.dataValues.password;
+			});
+
+			const pagination = {
+				path: '/users',
+				page,
+				prev_page: page - 1 >= 1 ? page - 1 : false,
+				next_page: Number(page) + Number(1) > lastPage ? false : Number(page) + Number(1),
+				lastPage,
+				totalRegisters: countEntity
+			};
+			res.status(200).json({ entities, pagination });
 		} catch (error) {
 			res.status(500).send({ message: `${error.message}` });
 		}
