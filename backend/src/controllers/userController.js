@@ -1,7 +1,6 @@
 import Entity from '../models/User.js';
 import MissingBodyError from '../util/customErrors/MissingBodyError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
-// import speakeasy from 'speakeasy';
 import Reservations from '../models/BlockReservation.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
@@ -13,7 +12,6 @@ class UserController {
 
 			users.forEach((user) => {
 				delete user.dataValues.password;
-				delete user.dataValues.secret;
 			});
 
 			res.status(200).json(users);
