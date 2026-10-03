@@ -1,0 +1,32 @@
+# Development stack: MySQL + the API.
+#   cp backend/.env.example backend/.env   (edit the values)
+#   docker compose --env-file backend/.env up --build
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in backend/.env}
+      MYSQL_DATABASE: ${DB_NAME:?set DB_NAME in backend/.env}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build: ./backend
+    env_file: ./backend/.env
+    environment:
+      # Inside the compose network the database is reachable by its service name, as root.
+      DB_HOST: mysql
+      DB_USER: root
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  mysql-data:
