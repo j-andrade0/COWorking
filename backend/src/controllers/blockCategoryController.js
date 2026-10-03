@@ -1,29 +1,21 @@
 import Entity from '../models/BlockCategory.js';
 import MissingBodyError from '../util/customErrors/MissingBodyError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
+import { buildPagination, paginationParams } from '../util/pagination.js';
 
 class BlockCategoryController {
 	static getAllEntities = async (req, res) => {
-		const { page = 1 } = req.query;
-		const limit = 10;
-		let lastPage = 1;
-		const countEntity = await Entity.count();
+		const { page, limit, offset } = paginationParams(req.query);
 
 		try {
+			const countEntity = await Entity.count();
 			const entities = await Entity.findAll({
 				order: [['id', 'ASC']],
-				offset: Number(page * limit - limit),
-				limit: limit
+				offset,
+				limit
 			});
 
-			const pagination = {
-				path: '/blockCategory',
-				page,
-				prev_page: page - 1 >= 1 ? page - 1 : false,
-				next_page: Number(page) + Number(1) > lastPage ? false : Number(page) + Number(1),
-				lastPage,
-				totalRegisters: countEntity
-			};
+			const pagination = buildPagination({ path: '/blockCategory', page, limit, total: countEntity });
 			return res.status(200).json({ entities, pagination });
 		} catch (error) {
 			return res.status(500).send({ message: `${error.message}` });
