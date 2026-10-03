@@ -2,7 +2,7 @@ import Entity from '../models/BlockReservation.js';
 import MissingBodyError from '../util/customErrors/MissingBodyError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
 import ValidationError from '../util/customErrors/ValidationError.js';
-import ValidateReservation from '../util/validateReservation.js';
+import ValidateReservation from '../util/ValidateReservation.js';
 
 class BlockReservationController {
 	static getAllEntities = async (req, res) => {
