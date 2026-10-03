@@ -90,7 +90,11 @@ class BlockReservationController {
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
-			if (error instanceof MissingBodyError || error instanceof NoEntityError || error instanceof ValidationError) {
+			if (
+				error instanceof MissingBodyError ||
+				error instanceof NoEntityError ||
+				error instanceof ValidationError
+			) {
 				res.status(400).send({ error: `${error}` });
 			} else {
 				res.status(500).send({ error: `${error}` });

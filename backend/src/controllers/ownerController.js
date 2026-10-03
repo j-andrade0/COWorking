@@ -20,7 +20,7 @@ class OwnerController {
 			entities.forEach((entity) => {
 				delete entity.dataValues.password;
 			});
-			
+
 			const pagination = buildPagination({ path: '/owners', page, limit, total: countEntity });
 			res.status(200).json({ entities, pagination });
 		} catch (error) {
@@ -88,7 +88,11 @@ class OwnerController {
 
 			// Only touch the columns that exist and were actually sent (PATCH semantics).
 			const fields = ['nomeEmpresarial', 'nomeFantasia', 'profilePhoto', 'email', 'phoneNumber'];
-			entity.set(Object.fromEntries(fields.filter((field) => req.body[field] !== undefined).map((field) => [field, req.body[field]])));
+			entity.set(
+				Object.fromEntries(
+					fields.filter((field) => req.body[field] !== undefined).map((field) => [field, req.body[field]])
+				)
+			);
 
 			await entity.save();
 
@@ -136,7 +140,9 @@ class OwnerController {
 			const isPasswordValid = await bcrypt.compare(password, entity.password);
 
 			if (isPasswordValid) {
-				const jwtToken = jwt.sign({ id: entity.id, role: 'owner' }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+				const jwtToken = jwt.sign({ id: entity.id, role: 'owner' }, process.env.JWT_SECRET_KEY, {
+					expiresIn: '1h'
+				});
 
 				return res.status(200).json({ jwtToken });
 			} else {
