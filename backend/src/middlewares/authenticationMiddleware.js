@@ -21,7 +21,8 @@ function authenticate(req, res, next) {
 		return next();
 	} catch (error) {
 		// Invalid, expired or any unexpected failure: never leave the request hanging.
-		const message = error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError' ? error.message : 'Unauthorized';
+		const message =
+			error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError' ? error.message : 'Unauthorized';
 		return res.status(401).send({ unauthorized: message });
 	}
 }

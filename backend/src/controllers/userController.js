@@ -176,7 +176,9 @@ class UserController {
 			const isPasswordValid = await bcrypt.compare(password, entity.password);
 
 			if (isPasswordValid) {
-				const jwtToken = jwt.sign({ id: entity.id, role: 'user' },process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+				const jwtToken = jwt.sign({ id: entity.id, role: 'user' }, process.env.JWT_SECRET_KEY, {
+					expiresIn: '1h'
+				});
 				return res.status(200).json({ jwtToken });
 			} else {
 				return res.status(401).send({ message: 'Please send the right password and token' });
