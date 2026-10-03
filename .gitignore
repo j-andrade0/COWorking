@@ -109,7 +109,4 @@ dist
 
 swagger_output.json
 
-# file to start the server
-run.sh 
-
 .idea
