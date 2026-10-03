@@ -87,15 +87,18 @@ class BlockReservationController {
 				throw new MissingBodyError('No data provided!');
 			}
 
-			entity.set({
-				startDate: req.body.startDate,
-				endDate: req.body.endDate
-			});
+			const startDate = req.body.startDate ?? entity.startDate;
+			const endDate = req.body.endDate ?? entity.endDate;
+
+			ValidateReservation.compareDate(startDate, endDate);
+			await ValidateReservation.isValidSchedule(entity.blockId, startDate, endDate, entity.id);
+
+			entity.set({ startDate, endDate });
 
 			await entity.save();
 			res.status(200).json(entity);
 		} catch (error) {
-			if (error instanceof MissingBodyError || error instanceof NoEntityError) {
+			if (error instanceof MissingBodyError || error instanceof NoEntityError || error instanceof ValidationError) {
 				res.status(400).send({ error: `${error}` });
 			} else {
 				res.status(500).send({ error: `${error}` });
