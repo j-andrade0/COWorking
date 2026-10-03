@@ -1,26 +1,26 @@
 import express from 'express';
 import SpaceController from '../controllers/spaceController.js';
-import authorizationMiddleware from '../middlewares/authorizationMiddleware.js';
+import authenticate from '../middlewares/authenticationMiddleware.js';
 
 const router = express.Router();
 
-router.get('/spaces', authorizationMiddleware, SpaceController.getAllEntities, () => {
+router.get('/spaces', authenticate, SpaceController.getAllEntities, () => {
 	/* #swagger.tags = ['Space']*/
 });
 
-router.get('/spaces/:id', authorizationMiddleware, SpaceController.getEntityById, () => {
+router.get('/spaces/:id', authenticate, SpaceController.getEntityById, () => {
 	/* #swagger.tags = ['Space']*/
 });
 
-router.post('/spaces', authorizationMiddleware, SpaceController.createEntity, () => {
+router.post('/spaces', authenticate, SpaceController.createEntity, () => {
 	/* #swagger.tags = ['Space']*/
 });
 
-router.patch('/spaces/:id', authorizationMiddleware, SpaceController.updateEntityData, () => {
+router.patch('/spaces/:id', authenticate, SpaceController.updateEntityData, () => {
 	/* #swagger.tags = ['Space']*/
 });
 
-router.delete('/spaces/:id', authorizationMiddleware, SpaceController.deleteEntity, () => {
+router.delete('/spaces/:id', authenticate, SpaceController.deleteEntity, () => {
 	/* #swagger.tags = ['Space']*/
 });
 
