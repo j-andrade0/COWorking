@@ -5,8 +5,9 @@
 	"license": "MIT",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"dev": "nodemon server.js",
-		"start": "./run.sh"
+		"swagger": "node ./swagger/swagger.js",
+		"dev": "./run.sh",
+		"start": "npm run swagger && node ./src/server.js"
 	},
 	"prettier": {
 		"tabWidth": 4,
@@ -19,7 +20,8 @@
 		"printWidth": 120
 	},
 	"devDependencies": {
-		"nodemon": "^2.0.15"
+		"nodemon": "^2.0.15",
+		"sqlite3": "^6.0.1"
 	},
 	"dependencies": {
 		"bcrypt": "^5.1.1",

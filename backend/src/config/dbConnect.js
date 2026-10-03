@@ -1,12 +1,17 @@
 import { Sequelize } from 'sequelize';
 
-const db = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
-	host: 'localhost',
-	dialect: 'mysql',
-	define: {
-		timestamps: false
-	}
-});
+// DB_DIALECT=sqlite runs against an in-memory SQLite database (used by the automated tests);
+// the default is MySQL, configured through the DB_* variables.
+const db =
+	process.env.DB_DIALECT === 'sqlite'
+		? new Sequelize({ dialect: 'sqlite', storage: ':memory:', logging: false, define: { timestamps: false } })
+		: new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+				host: process.env.DB_HOST || 'localhost',
+				dialect: 'mysql',
+				define: {
+					timestamps: false
+				}
+			});
 
 try {
 	await db.authenticate();
@@ -16,4 +21,3 @@ try {
 }
 
 export default db;
-// should close the connection?
