@@ -20,14 +20,14 @@ describe('login', () => {
 		expect(res.status).toBe(401);
 	});
 
-	it('logs an owner in (the controller used to crash on a missing jwt import)', async () => {
+	it('logs an owner in and returns a JWT with role owner', async () => {
 		const { body } = await registerOwner();
 		const res = await api().post('/ownerLogin').send({ email: body.email, password: body.password });
 		expect(res.status).toBe(200);
 		expect(jwt.verify(res.body.jwtToken, process.env.JWT_SECRET_KEY)).toMatchObject({ role: 'owner' });
 	});
 
-	it('stores the owner password hashed, never in plain text', async () => {
+	it('stores the owner password as a bcrypt hash', async () => {
 		const { body, res } = await registerOwner();
 		const row = await Owner.findByPk(res.body.createdEntity.id);
 		expect(row.password).not.toBe(body.password);
@@ -63,9 +63,9 @@ describe('authentication middleware', () => {
 		expect(res.status).toBe(401);
 	});
 
-	it('rejects a token signed with another secret with 401', async () => {
-		const forged = jwt.sign({ id: 1 }, 'another-secret');
-		const res = await api().get('/users').set('Authorization', forged);
+	it('returns 401 for a token signed with a different key', async () => {
+		const foreignToken = jwt.sign({ id: 1 }, 'another-key');
+		const res = await api().get('/users').set('Authorization', foreignToken);
 		expect(res.status).toBe(401);
 	});
 
@@ -81,7 +81,7 @@ describe('authentication middleware', () => {
 		expect((await api().get('/users').set('Authorization', `Bearer ${token}`)).status).toBe(200);
 	});
 
-	it('answers 401 instead of hanging when verification fails unexpectedly', () => {
+	it('returns 401 when verification fails with an unexpected error', () => {
 		const secret = process.env.JWT_SECRET_KEY;
 		delete process.env.JWT_SECRET_KEY; // jwt.verify then throws a plain Error, not a JsonWebTokenError
 		try {
@@ -100,7 +100,7 @@ describe('authentication middleware', () => {
 		expect((await registerOwner()).res.status).toBe(201);
 	});
 
-	it('reaches /users/validateUser (it used to be shadowed by /users/:id) without leaking the password', async () => {
+	it('serves /users/validateUser and omits the password hash', async () => {
 		const { token, email } = await loginUser();
 		const res = await api().get('/users/validateUser').query({ email }).set('Authorization', token);
 		expect(res.status).toBe(200);

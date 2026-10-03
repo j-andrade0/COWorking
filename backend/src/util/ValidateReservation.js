@@ -15,8 +15,8 @@ class ValidateReservation {
 		}
 	};
 
-	// Parses what the client sent. Comparing the raw strings is wrong as soon as the formats or
-	// offsets differ ("...T09:00:00-03:00" vs "...T10:00:00.000Z"), so everything is compared as Date.
+	// Parses what the client sent. Everything is compared as Date, so mixed formats and UTC offsets
+	// ("...T09:00:00-03:00" vs "...T10:00:00.000Z") are handled.
 	static parseDate = (value, name) => {
 		const date = new Date(value);
 		if (value === undefined || value === null || Number.isNaN(date.getTime())) {

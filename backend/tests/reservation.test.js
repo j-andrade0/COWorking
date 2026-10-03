@@ -60,7 +60,7 @@ describe('POST /blockReservation validation', () => {
 		expect(res.body.message).toBe('Time already booked');
 	});
 
-	it('rejects an overlap sent with a different UTC offset (strings used to be compared)', async () => {
+	it('rejects an overlap sent with a different UTC offset', async () => {
 		// 08:00-09:30 at -03:00 is 11:00Z-12:30Z
 		const res = await book('2030-01-10T08:00:00-03:00', '2030-01-10T09:30:00-03:00');
 		expect(res.status).toBe(400);
