@@ -57,12 +57,14 @@ class UserController {
 
 	static getEntityByEmail = async (req, res) => {
 		try {
-			const entity = await Entity.findOne({ where: { email: req.body.email } });
+			const email = req.query.email ?? req.body?.email;
+			const entity = await Entity.findOne({ where: { email } });
 			if (entity) {
+				delete entity.dataValues.password;
 				res.status(200).json(entity);
 			} else {
 				res.status(400).send({
-					message: `Email ${req.body.email} not found!`
+					message: `Email ${email} not found!`
 				});
 			}
 		} catch (error) {
@@ -182,7 +184,7 @@ class UserController {
 			const isPasswordValid = await bcrypt.compare(password, entity.password);
 
 			if (isPasswordValid) {
-				const jwtToken = jwt.sign({ id: entity.id }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+				const jwtToken = jwt.sign({ id: entity.id, role: 'user' },process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
 				return res.status(200).json({ jwtToken });
 			} else {
 				return res.status(401).send({ message: 'Please send the right password and token' });
