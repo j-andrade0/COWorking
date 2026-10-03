@@ -1,26 +1,26 @@
 import express from 'express';
 import BlockReservationController from '../controllers/blockReservationController.js';
-import authorizationMiddleware from '../middlewares/authorizationMiddleware.js';
+import authenticate from '../middlewares/authenticationMiddleware.js';
 
 const router = express.Router();
 
-router.get('/blockReservation', authorizationMiddleware, BlockReservationController.getAllEntities, () => {
+router.get('/blockReservation', authenticate, BlockReservationController.getAllEntities, () => {
 	/* #swagger.tags = ['BlockReservation']*/
 });
 
-router.get('/blockReservation/:id', authorizationMiddleware, BlockReservationController.getEntityById, () => {
+router.get('/blockReservation/:id', authenticate, BlockReservationController.getEntityById, () => {
 	/* #swagger.tags = ['BlockReservation']*/
 });
 
-router.post('/blockReservation', authorizationMiddleware, BlockReservationController.createEntity, () => {
+router.post('/blockReservation', authenticate, BlockReservationController.createEntity, () => {
 	/* #swagger.tags = ['BlockReservation']*/
 });
 
-router.patch('/blockReservation/:id', authorizationMiddleware, BlockReservationController.updateEntityData, () => {
+router.patch('/blockReservation/:id', authenticate, BlockReservationController.updateEntityData, () => {
 	/* #swagger.tags = ['BlockReservation']*/
 });
 
-router.delete('/blockReservation/:id', authorizationMiddleware, BlockReservationController.deleteEntity, () => {
+router.delete('/blockReservation/:id', authenticate, BlockReservationController.deleteEntity, () => {
 	/* #swagger.tags = ['BlockReservation']*/
 });
 

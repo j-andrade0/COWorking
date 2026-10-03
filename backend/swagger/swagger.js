@@ -19,7 +19,16 @@ const doc = {
 	host: 'localhost:3000',
 	basePath: '/',
 	consumes: ['application/json'],
-	produces: ['application/json']
+	produces: ['application/json'],
+	securityDefinitions: {
+		apiKeyAuth: {
+			type: 'apiKey',
+			in: 'header',
+			name: 'Authorization',
+			description: 'JWT returned by /userLogin or /ownerLogin. Either the raw token or "Bearer <token>".'
+		}
+	},
+	security: [{ apiKeyAuth: [] }]
 };
 
 swaggerAutogen(outputFile, endpointsFile, doc);
