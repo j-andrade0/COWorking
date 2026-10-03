@@ -62,8 +62,7 @@ class OwnerController {
 				nomeFantasia,
 				cnpj,
 				email,
-				password,
-				hashedPassword,
+				password: hashedPassword,
 				phoneNumber,
 				profilePhoto
 			});
