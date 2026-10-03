@@ -3,7 +3,7 @@ import globals from 'globals';
 
 export default [
 	{ ignores: ['node_modules/**', 'swagger/swagger_output.json', 'coverage/**'] },
-	js.configs.recommended, // includes no-undef: catches things like a missing `jsonwebtoken` import
+	js.configs.recommended, // includes no-undef (reports identifiers that are used without being imported or declared)
 	{
 		languageOptions: {
 			ecmaVersion: 'latest',

@@ -20,7 +20,7 @@ function authenticate(req, res, next) {
 		req.auth = jwtLib.verify(token, process.env.JWT_SECRET_KEY); // throws a JsonWebTokenError if it is not valid
 		return next();
 	} catch (error) {
-		// Invalid, expired or any unexpected failure: never leave the request hanging.
+		// Invalid, expired or any other verification failure answers 401.
 		const message =
 			error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError' ? error.message : 'Unauthorized';
 		return res.status(401).send({ unauthorized: message });
