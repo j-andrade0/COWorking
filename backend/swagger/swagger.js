@@ -1,6 +1,7 @@
 import swaggerAutogen from 'swagger-autogen';
 
-const outputFile = './swagger_output.json';
+// Paths are relative to the working directory, so run this from backend/ (npm run swagger).
+const outputFile = './swagger/swagger_output.json';
 const endpointsFile = [
 	'./src/routes/userRoutes.js',
 	'./src/routes/ownerRoutes.js',
