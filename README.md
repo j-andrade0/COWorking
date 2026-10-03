@@ -4,15 +4,17 @@
 
 > **English summary:** REST API for managing and booking coworking spaces (users, space owners, spaces, rooms/desks and
 > time-slot reservations with overlap validation). Built with Node.js 20, Express, Sequelize, MySQL, JWT and bcrypt, with
-> Swagger docs, ESLint/Prettier, Vitest + supertest tests and GitHub Actions CI. It was the back end of my final
-> course project (TCC) for the Software Engineering degree, written in 2023; the mobile app was built by a colleague and
-> is not in this repository. Quick start: `cp backend/.env.example backend/.env`, edit it, then
+> Swagger docs, ESLint/Prettier, Vitest + supertest tests, GitHub Actions CI and a Docker Compose setup. It was the back
+> end of my final course project (TCC) for the Software Engineering degree, written in 2023 (135 commits, issue → branch
+> → PR → merge); in 2026 I added JWT-protected routes, shared pagination, date-based reservation validation, tests, CI
+> and Docker. The mobile app was built by a colleague and is not in this repository. Quick start: `cp backend/.env.example backend/.env`, edit it, then
 > `docker compose --env-file backend/.env up --build` and open <http://localhost:3000/doc/>.
 
 Backend de uma plataforma para gerenciar e reservar espaços de coworking, pagos ou gratuitos. Foi o meu Trabalho de
 Conclusão de Curso (TCC) de Engenharia de Software, desenvolvido entre março e novembro de 2023. O histórico de commits
-(issue → branch → PR → merge) é o original de 2023; em outubro de 2026 revisei o código (autenticação, validação de
-reservas, paginação), acrescentei testes, CI e Docker, sempre em PRs novos e sem reescrever o histórico.
+(issue → branch → PR → merge) é o original de 2023. Em outubro de 2026 acrescentei, sempre em PRs novos e sem reescrever
+o histórico: rotas protegidas por JWT, paginação compartilhada, validação de reservas com datas, configuração por
+variáveis de ambiente (`.env.example`), Docker Compose, testes automatizados (Vitest e supertest) e CI no GitHub Actions.
 
 ## Stack
 
@@ -55,7 +57,7 @@ As tabelas são criadas pelo Sequelize na primeira execução (`db.sync()`). Dad
 | `DB_USER`        | usuário do banco                                                         |
 | `DB_PASSWORD`    | senha do banco                                                           |
 | `DB_HOST`        | host do banco (`localhost` por padrão; `mysql` dentro do Docker Compose) |
-| `JWT_SECRET_KEY` | segredo usado para assinar os tokens; o servidor não sobe sem ele        |
+| `JWT_SECRET_KEY` | chave usada para assinar os tokens; o servidor não sobe sem ele          |
 | `PORT`           | porta da API (padrão `3000`)                                             |
 | `DB_DIALECT`     | opcional; `sqlite` usa um banco em memória (é o que os testes usam)      |
 
@@ -160,18 +162,12 @@ npm test              # Vitest + supertest, banco SQLite em memória (não preci
 O GitHub Actions roda isso em Node 20 e, em outro job, sobe o `docker compose` com MySQL de verdade e faz um teste de
 fumaça (documentação, cadastro, login e rota protegida).
 
-## Limitações conhecidas e o que eu faria diferente
+## Próximos passos
 
-- **Não havia testes nem CI no projeto original (2023);** foram adicionados em 2026 e cobrem login, autenticação,
-  validação de reservas e paginação, mas não todos os controllers.
-- **Só autenticação, sem autorização por recurso:** qualquer token válido pode alterar ou apagar qualquer usuário, dono
-  ou espaço. O token já carrega `role`, o próximo passo seria checar dono do recurso e papel.
-- **CRUD repetido** em todos os controllers; eu criaria um controller/serviço base e uma camada de validação de entrada.
-- **Sem refresh token** nem revogação de token; o token dura 1 hora.
-- **`db.sync()` em vez de migrations:** o esquema muda sem histórico versionado.
-- **Sem rate limit** nos logins, sem CORS configurado e sem validação formal do corpo das requisições.
-- **Saldo (`balanceAccount`) e pagamentos** existem só como campo; não há fluxo de pagamento.
-- O app mobile não está neste repositório.
+- Extrair um controller/serviço base para o CRUD dos controllers e adicionar esquemas de validação do corpo das requisições.
+- Migrar de `db.sync()` para migrations do Sequelize.
+- Ampliar os testes automatizados para todos os controllers.
+- Implementar o fluxo de pagamentos e de saldo (`balanceAccount`), hoje apenas um campo do modelo.
 
 ## Autores
 
