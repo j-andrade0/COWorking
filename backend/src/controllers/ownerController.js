@@ -2,6 +2,7 @@ import Entity from '../models/Owner.js';
 import MissingBodyError from '../util/customErrors/MissingBodyError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 class OwnerController {
 	static getAllEntities = async (req, res) => {
@@ -40,6 +41,7 @@ class OwnerController {
 			const entity = await Entity.findByPk(req.params.id);
 
 			if (entity) {
+				delete entity.dataValues.password;
 				res.status(200).json(entity);
 			} else {
 				res.status(400).send({
@@ -62,8 +64,7 @@ class OwnerController {
 				nomeFantasia,
 				cnpj,
 				email,
-				password,
-				hashedPassword,
+				password: hashedPassword,
 				phoneNumber,
 				profilePhoto
 			});
@@ -93,18 +94,13 @@ class OwnerController {
 				throw new MissingBodyError('No body provided!');
 			}
 
-			entity.set({
-				firstName: req.body.firstName,
-				lastName: req.body.lastName,
-				nomeFantasia: req.body.nomeFantasia,
-				nomeEmpresarial: req.body.nomeEmpresarial,
-				profilePhoto: req.body.profilePhoto,
-				email: req.body.email,
-				phoneNumber: req.body.phoneNumber
-			});
+			// Only touch the columns that exist and were actually sent (PATCH semantics).
+			const fields = ['nomeEmpresarial', 'nomeFantasia', 'profilePhoto', 'email', 'phoneNumber'];
+			entity.set(Object.fromEntries(fields.filter((field) => req.body[field] !== undefined).map((field) => [field, req.body[field]])));
 
 			await entity.save();
 
+			delete entity.dataValues.password;
 			res.status(200).json(entity);
 		} catch (error) {
 			if (error instanceof MissingBodyError || error instanceof NoEntityError) {
@@ -148,7 +144,7 @@ class OwnerController {
 			const isPasswordValid = await bcrypt.compare(password, entity.password);
 
 			if (isPasswordValid) {
-				const jwtToken = jwt.sign({ id: entity.id }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+				const jwtToken = jwt.sign({ id: entity.id, role: 'owner' }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
 
 				return res.status(200).json({ jwtToken });
 			} else {
