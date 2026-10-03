@@ -2,6 +2,7 @@ import Entity from '../models/Owner.js';
 import MissingBodyError from '../util/customErrors/MissingBodyError.js';
 import NoEntityError from '../util/customErrors/NoEntityError.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 class OwnerController {
 	static getAllEntities = async (req, res) => {
@@ -147,7 +148,7 @@ class OwnerController {
 			const isPasswordValid = await bcrypt.compare(password, entity.password);
 
 			if (isPasswordValid) {
-				const jwtToken = jwt.sign({ id: entity.id }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+				const jwtToken = jwt.sign({ id: entity.id, role: 'owner' }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
 
 				return res.status(200).json({ jwtToken });
 			} else {
